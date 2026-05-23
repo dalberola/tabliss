@@ -86,6 +86,19 @@ const config = {
     }),
   ],
   devtool: isWeb || !isProduction ? "source-map" : false,
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "initial",
+          priority: 10,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   stats: {
     warnings: false,
   },

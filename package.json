@@ -22,7 +22,6 @@
     "date-fns-tz": "^3.2.0",
     "feather-icons": "^4.29.2",
     "github-calendar": "^2.3.4",
-    "in-browser-language": "^1.0.3",
     "nanoid": "^5.1.11",
     "normalize.css": "^8.0.1",
     "react": "^19.2.6",

@@ -39,7 +39,7 @@ test("database listen", () => {
   const fn = jest.fn();
   DB.listen(db, fn);
   DB.put(db, "test", "test");
-  expect(fn).toBeCalledWith(["test", "test"]);
+  expect(fn).toHaveBeenCalledWith(["test", "test"]);
 });
 
 test("database listen unsubscribe", () => {
@@ -48,7 +48,7 @@ test("database listen unsubscribe", () => {
   const unsub = DB.listen(db, fn);
   unsub();
   DB.put(db, "test", "test");
-  expect(fn).not.toBeCalled();
+  expect(fn).not.toHaveBeenCalled();
 });
 
 test("database default data", () => {

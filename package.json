@@ -3,6 +3,15 @@
   "version": "2.6.0",
   "license": "GPL-3.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not IE 11"
+  ],
   "scripts": {
     "build": "npm run build:web",
     "build:chromium": "NODE_ENV=production BUILD_TARGET=chromium webpack",

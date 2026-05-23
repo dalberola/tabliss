@@ -1,7 +1,6 @@
 require("dotenv/config");
 
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -22,6 +21,10 @@ const config = {
     path: path.resolve("dist", buildTarget),
     publicPath: "/",
     filename: isWeb ? "[name].[contenthash:12].js" : "[name].js",
+    assetModuleFilename: isWeb
+      ? "[name].[contenthash:12][ext]"
+      : "[name][ext]",
+    clean: true,
   },
   mode: isProduction ? "production" : "development",
   resolve: {
@@ -35,11 +38,8 @@ const config = {
       },
       {
         test: /\.(gif|jpe?g|png)$/,
-        loader: "url-loader",
-        options: {
-          limit: 10000,
-          name: isWeb ? "[name].[contenthash:12].[ext]" : "[name].[ext]",
-        },
+        type: "asset",
+        parser: { dataUrlCondition: { maxSize: 10000 } },
       },
       {
         test: /\.sass$/,
@@ -47,7 +47,7 @@ const config = {
       },
       {
         test: /\.svg$/,
-        loader: "raw-loader",
+        type: "asset/source",
       },
       {
         test: /\.(ts|tsx)$/,
@@ -57,7 +57,6 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: "target/shared" },

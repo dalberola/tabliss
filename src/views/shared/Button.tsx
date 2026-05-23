@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-type Props = JSX.IntrinsicElements["button"] & {
+type Props = Omit<React.ComponentPropsWithoutRef<"button">, "ref"> & {
   primary?: boolean;
 };
 

@@ -1,15 +1,15 @@
 import { startOfDay } from "date-fns";
-import { format, utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { format, fromZonedTime, toZonedTime } from "date-fns-tz";
 
 import { API } from "../../types";
 import { gameQuery as query } from "./query";
 
 function getEstString(date: Date) {
-  const dateUTC = zonedTimeToUtc(
+  const dateUTC = fromZonedTime(
     startOfDay(date),
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
-  const dateEST = utcToZonedTime(dateUTC, "EST");
+  const dateEST = toZonedTime(dateUTC, "EST");
   return format(dateEST, "yyyyMMdd");
 }
 

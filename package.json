@@ -25,17 +25,17 @@
     "in-browser-language": "^1.0.3",
     "nanoid": "^3.3.7",
     "normalize.css": "^8.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.12",
-    "react-intl": "^6.6.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-error-boundary": "^6.1.1",
+    "react-intl": "^10.1.9",
     "tlds": "^1.261.0",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
     "@types/webextension-polyfill": "^0.10.7",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
@@ -55,5 +55,9 @@
     "webpack-dev-server": "^5.2.4",
     "webpack-ext-reloader": "^1.1.13",
     "workbox-webpack-plugin": "^7.4.1"
+  },
+  "overrides": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3"
   }
 }

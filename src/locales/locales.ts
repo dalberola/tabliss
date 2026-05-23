@@ -1,4 +1,3 @@
-import { pick } from "in-browser-language";
 import ar from "./lang/ar.json";
 import caES from "./lang/ca-ES.json";
 import cs from "./lang/cs.json";
@@ -92,4 +91,8 @@ export const messages: Record<string, Record<string, string>> = {
 };
 
 export const locales = Object.keys(messages);
-export const defaultLocale = pick(locales, "en");
+
+const supported = new Set(locales);
+const preferred = navigator.languages ?? [navigator.language];
+export const defaultLocale =
+  preferred.find((lang) => supported.has(lang)) ?? "en";

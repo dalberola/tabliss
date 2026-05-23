@@ -48,7 +48,7 @@
     "sass": "^1.100.0",
     "sass-loader": "^16.0.8",
     "ts-loader": "^9.5.7",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "typescript-react-intl": "^0.4.1",
     "webpack": "^5.107.1",
     "webpack-cli": "^7.0.2",

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "incremental": true,
     "module": "commonjs",
-    "outDir": "dist/test"
+    "moduleResolution": "node10",
+    "outDir": "dist/test",
+    "rootDir": "./src"
   },
   "exclude": []
 }

@@ -30,7 +30,7 @@ describe("unsplash/api", () => {
       });
 
       await expect(fetchImages({ by: "official" } as any)).rejects.toThrow(
-        /Unsplash API 401 Unauthorized/,
+        /HTTP 401 Unauthorized/,
       );
     });
 
@@ -43,7 +43,7 @@ describe("unsplash/api", () => {
       });
 
       await expect(fetchImages({ by: "official" } as any)).rejects.toThrow(
-        /non-array payload/,
+        /Expected array response/,
       );
     });
   });

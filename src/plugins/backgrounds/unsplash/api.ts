@@ -1,3 +1,4 @@
+import { fetchJsonArray } from "../../../lib";
 import { Data, Image } from "./types";
 
 export const officialCollection = 1053828;
@@ -42,23 +43,10 @@ export const fetchImages = async ({
       params.set("collections", String(officialCollection));
   }
 
-  const res = await fetch(`${url}?${params}`, { headers, cache: "no-cache" });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(
-      `Unsplash API ${res.status} ${res.statusText}${detail ? `: ${detail}` : ""}`,
-    );
-  }
-
-  const body = await res.json();
-
-  // TODO: validate types
-  if (!Array.isArray(body)) {
-    throw new Error(
-      `Unsplash API returned non-array payload: ${JSON.stringify(body).slice(0, 200)}`,
-    );
-  }
+  const body = await fetchJsonArray<any>(`${url}?${params}`, {
+    headers,
+    cache: "no-cache",
+  });
 
   return body.map((item: any) => ({
     src: item.urls.raw,

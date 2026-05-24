@@ -88,10 +88,22 @@ jobs:
           FTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
           FTP_PATH: ${{ steps.target.outputs.ftp_path }}
           DRY_RUN: ${{ inputs.dry_run }}
+        # `pipefail` is critical: without it, the `| sed` at the end of
+        # the lftp invocation swallows lftp's non-zero exit code and
+        # makes failed deploys appear green.
+        shell: bash -e -o pipefail {0}
         run: |
+          # Diagnostic: print the byte length of the password (after
+          # whitespace trim). Helps catch the case where the GitHub
+          # secret value differs in length from what's on the host.
+          FTP_PASSWORD_LEN_BEFORE=$(printf '%s' "$FTP_PASSWORD" | wc -c | tr -d ' ')
+
           # Trim whitespace from credentials.
           FTP_USER=$(printf '%s' "$FTP_USER" | tr -d '[:space:]')
           FTP_PASSWORD=$(printf '%s' "$FTP_PASSWORD" | tr -d '[:space:]')
+
+          FTP_PASSWORD_LEN=$(printf '%s' "$FTP_PASSWORD" | wc -c | tr -d ' ')
+          echo "Credential lengths: user=$(printf '%s' "$FTP_USER" | wc -c | tr -d ' ') password=$FTP_PASSWORD_LEN (before trim: $FTP_PASSWORD_LEN_BEFORE)"
 
           DRY_FLAG=""
           if [ "$DRY_RUN" = "true" ]; then

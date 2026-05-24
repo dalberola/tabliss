@@ -6,16 +6,14 @@
  * @url http://jenevoldsen.com/literature-clock/
  * @url https://github.com/JohannesNE/literature-clock
  */
+import { lazy } from "react";
 import { Config } from "../../types";
-import LiteratureClock from "./LiteratureClock";
-import LiteratureClockSettings from "./LiteratureClockSettings";
-
 const config: Config = {
   key: "widget/literature-clock",
   name: "Literature Clock",
   description: "Check the time, with sophistication.",
-  dashboardComponent: LiteratureClock,
-  settingsComponent: LiteratureClockSettings,
+  dashboardComponent: lazy(() => import("./LiteratureClock")),
+  settingsComponent: lazy(() => import("./LiteratureClockSettings")),
 };
 
 export default config;

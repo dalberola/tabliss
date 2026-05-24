@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Quote from "./Quote";
-import QuoteSettings from "./QuoteSettings";
-
 const config: Config = {
   key: "widget/quote",
   name: "Quotes",
   description: "Be inspired (or not, there's categories).",
-  dashboardComponent: Quote,
-  settingsComponent: QuoteSettings,
+  dashboardComponent: lazy(() => import("./Quote")),
+  settingsComponent: lazy(() => import("./QuoteSettings")),
 };
 
 export default config;

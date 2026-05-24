@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Time from "./Time";
-import TimeSettings from "./TimeSettings";
-
 const config: Config = {
   key: "widget/time",
   name: "Time",
   description: "Be on time.",
-  dashboardComponent: Time,
-  settingsComponent: TimeSettings,
+  dashboardComponent: lazy(() => import("./Time")),
+  settingsComponent: lazy(() => import("./TimeSettings")),
 };
 
 export default config;

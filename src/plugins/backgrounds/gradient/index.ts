@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Gradient from "./Gradient";
-import GradientSettings from "./GradientSettings";
-
 const config: Config = {
   key: "background/gradient",
   name: "Colour Gradient",
   description: "Add more splashes of colour.",
-  dashboardComponent: Gradient,
-  settingsComponent: GradientSettings,
+  dashboardComponent: lazy(() => import("./Gradient")),
+  settingsComponent: lazy(() => import("./GradientSettings")),
 };
 
 export default config;

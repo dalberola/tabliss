@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import IpInfo from "./IpInfo";
-import IpInfoSettings from "./IpInfoSettings";
-
 const config: Config = {
   key: "widget/ipInfo",
   name: "IP Info",
   description: "Displays data on your IP and location",
-  dashboardComponent: IpInfo,
-  settingsComponent: IpInfoSettings,
+  dashboardComponent: lazy(() => import("./IpInfo")),
+  settingsComponent: lazy(() => import("./IpInfoSettings")),
 };
 
 export default config;

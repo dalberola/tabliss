@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Joke from "./Joke";
-import JokeSettings from "./JokeSettings";
-
 const config: Config = {
   key: "widget/joke",
   name: "Jokes",
   description: "Some amusement or laughter",
-  dashboardComponent: Joke,
-  settingsComponent: JokeSettings,
+  dashboardComponent: lazy(() => import("./Joke")),
+  settingsComponent: lazy(() => import("./JokeSettings")),
 };
 
 export default config;

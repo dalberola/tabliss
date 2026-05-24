@@ -93,16 +93,6 @@ jobs:
           FTP_USER=$(printf '%s' "$FTP_USER" | tr -d '[:space:]')
           FTP_PASSWORD=$(printf '%s' "$FTP_PASSWORD" | tr -d '[:space:]')
 
-          # GitHub Actions only masks secrets by exact value match. lftp
-          # logs URLs in verbose mode with credentials URL-encoded — the
-          # encoded form differs from the raw secret and slips past the
-          # mask. Register the URL-encoded variants explicitly.
-          encode() { python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$1"; }
-          ENC_USER=$(encode "$FTP_USER")
-          ENC_PASS=$(encode "$FTP_PASSWORD")
-          echo "::add-mask::$ENC_USER"
-          echo "::add-mask::$ENC_PASS"
-
           DRY_FLAG=""
           if [ "$DRY_RUN" = "true" ]; then
             DRY_FLAG="--dry-run"
@@ -123,6 +113,14 @@ jobs:
           # contents over the wire in cleartext. The host accepts FTPS
           # too — to upgrade, change `ftp://` to `ftps://` and uncomment
           # the two ssl-force lines below.
+          # Why the sed pipe: lftp echoes its connection URL with
+          # credentials embedded (e.g. `ftp://USER:PASS@HOST/...`) when
+          # mirror runs verbose-mode commands like `mkdir -p`. lftp uses
+          # different URL-encoding rules than GitHub's secret matcher —
+          # `#` and `*` in the password come through unescaped, so the
+          # exact-string mask doesn't match. The sed strips the
+          # entire `user:pass@` segment from any URL-shaped substring
+          # before it reaches the log, regardless of encoding.
           lftp -c "
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
@@ -136,7 +134,7 @@ jobs:
               $DRY_FLAG \
               dist/web/ '$FTP_PATH';
             bye
-          "
+          " 2>&1 | sed -E 's|([a-z]+)://[^/@[:space:]]+@|\1://***@|g'
 
       - name: Summary
         if: success()

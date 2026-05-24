@@ -3,8 +3,6 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
-
 ## [2.8.0] - 2026-05-24
 
 A code-quality release driven by a structural audit. Four latent bugs were caught and fixed along the way; no user-visible feature changes.

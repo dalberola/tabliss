@@ -1,0 +1,120 @@
+name: Deploy web to prod
+
+# Manual trigger only for now. Add a `push: branches: [main]` block here
+# once you're comfortable having every main commit auto-deploy.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (show what would change, don't upload)"
+        type: boolean
+        default: false
+
+# Cancel any in-flight deploy if a new one is queued.
+concurrency:
+  group: deploy-web-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build + SFTP upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build web target
+        run: npm run build:web
+
+      - name: Sanity-check deploy target
+        env:
+          SFTP_PATH: ${{ vars.SFTP_PATH }}
+        run: |
+          if [ -z "$SFTP_PATH" ] || [ "$SFTP_PATH" = "/" ]; then
+            echo "::error::SFTP_PATH is empty or '/'. Refusing to deploy — would risk deleting files outside the intended directory." >&2
+            exit 1
+          fi
+          if [ ! -d dist/web ] || [ -z "$(ls -A dist/web)" ]; then
+            echo "::error::dist/web is missing or empty. Build must have failed silently." >&2
+            exit 1
+          fi
+          echo "Will upload $(find dist/web -type f | wc -l | tr -d ' ') files to $SFTP_PATH"
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Trust SFTP host key
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          # ssh-keyscan trusts whatever the host presents on first connect.
+          # If you want to harden this, save the expected host key as a
+          # repo secret SFTP_HOST_KEY and validate before appending.
+          ssh-keyscan -H "$SFTP_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Upload via SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_PATH: ${{ vars.SFTP_PATH }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          DRY_FLAG=""
+          if [ "$DRY_RUN" = "true" ]; then
+            DRY_FLAG="--dry-run"
+            echo "::notice::Dry-run mode — no files will be uploaded or deleted on the server."
+          fi
+
+          # Notes on the mirror flags below:
+          # --reverse: push local → remote (mirror's default is the other way)
+          # --delete: remove remote files no longer present locally (within SFTP_PATH only)
+          # --verbose: show every transfer
+          # --parallel=4: 4 concurrent transfers
+          # --exclude-glob '.*': skip dotfiles
+          # By default lftp uploads new files before deleting stale ones,
+          # so in-flight requests for the previous deploy can usually
+          # complete before their JS chunks disappear.
+          lftp -c "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3;
+            set net:reconnect-interval-base 5;
+            open -u '$SFTP_USER','$SFTP_PASSWORD' sftp://$SFTP_HOST;
+            mirror --reverse --delete --verbose --parallel=4 \
+              --exclude-glob '.*' \
+              $DRY_FLAG \
+              dist/web/ '$SFTP_PATH';
+            bye
+          "
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "### Deploy complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "**Mode:** dry-run (no changes made on the server)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "**Mode:** live" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Bundle hash:** $(ls dist/web/main.*.js 2>/dev/null | sed 's|.*main\.||;s|\.js$||')" >> "$GITHUB_STEP_SUMMARY"
+          fi

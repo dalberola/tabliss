@@ -43,9 +43,22 @@ export const fetchImages = async ({
   }
 
   const res = await fetch(`${url}?${params}`, { headers, cache: "no-cache" });
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(
+      `Unsplash API ${res.status} ${res.statusText}${detail ? `: ${detail}` : ""}`,
+    );
+  }
+
   const body = await res.json();
 
   // TODO: validate types
+  if (!Array.isArray(body)) {
+    throw new Error(
+      `Unsplash API returned non-array payload: ${JSON.stringify(body).slice(0, 200)}`,
+    );
+  }
 
   return body.map((item: any) => ({
     src: item.urls.raw,

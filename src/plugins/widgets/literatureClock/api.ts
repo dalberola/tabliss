@@ -1,3 +1,4 @@
+import { fetchJsonArray } from "../../../lib";
 import { Quote } from "./types";
 
 const apiEndpoint =
@@ -13,14 +14,17 @@ export function getTimeCode(time: Date) {
 
 // Get quote by time code
 export async function getQuoteByTimeCode(timeCode: string): Promise<Quote> {
-  const res = await fetch(`${apiEndpoint}/${timeCode}.json`, { mode: "cors" });
-  const body: any[] = await res.json();
-
-  if (res.status === 429) {
-    return {
-      title: "Too many requests at this time",
-    };
+  try {
+    const body = await fetchJsonArray<Quote>(`${apiEndpoint}/${timeCode}.json`, {
+      mode: "cors",
+    });
+    return body[Math.floor(Math.random() * body.length)];
+  } catch (err) {
+    // Surface rate-limit errors as a polite placeholder rather than a crash;
+    // any other failure re-throws into the plugin's error boundary.
+    if (err instanceof Error && /\b429\b/.test(err.message)) {
+      return { title: "Too many requests at this time" };
+    }
+    throw err;
   }
-
-  return body[Math.floor(Math.random() * body.length)];
 }

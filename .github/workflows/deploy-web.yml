@@ -88,8 +88,29 @@ jobs:
           # ssh-keyscan trusts whatever the host presents on first connect.
           # If you want to harden this, save the expected host key as a
           # repo secret SFTP_HOST_KEY and validate before appending.
-          ssh-keyscan -H "$SFTP_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # Stderr kept so a failure surfaces in the logs (don't redirect
+          # to /dev/null).
+          ssh-keyscan -H "$SFTP_HOST" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          echo "known_hosts entry count: $(wc -l < ~/.ssh/known_hosts)"
+
+      - name: Probe SFTP auth
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SSHPASS: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          SFTP_USER=$(printf '%s' "$SFTP_USER" | tr -d '[:space:]')
+          SSHPASS=$(printf '%s' "$SSHPASS" | tr -d '[:space:]')
+          export SSHPASS
+          # One-shot non-interactive probe. -o BatchMode=no allows the
+          # password to be supplied; -v gives us verbose handshake output
+          # so we can tell whether the failure is host key, auth, or
+          # something else.
+          echo "Probing $SFTP_USER@(masked) ..."
+          sshpass -e ssh -v -o BatchMode=no -o ConnectTimeout=10 \
+            "$SFTP_USER@$SFTP_HOST" "echo connected ok; exit" 2>&1 | \
+            sed 's|'"$SFTP_HOST"'|***|g' | tail -40
 
       - name: Upload via SFTP
         env:

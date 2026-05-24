@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2.7.1] - 2026-05-24
+
+### Changed
+
+- Each widget and background plugin is now lazy-loaded on demand. Only the plugins on your dashboard load on first paint; the remaining 17+ load on demand when you open settings. Cuts the main JavaScript bundle from 189 KB to 130 KB and the first-paint eager bundle from 622 KB to 510 KB.
+
+### Fixed
+
+- Firefox manifest's `strict_min_version` bumped from 54.0 to 91.0 to match the `Error.cause` polyfill the codebase ships, preventing install on Firefox versions where the polyfill cannot work.
+
 ## [2.7.0] - 2026-05-24
 
 A modernization release focused on dependency updates, build-system cleanup, and a substantial first-paint performance improvement. No user-visible feature changes.

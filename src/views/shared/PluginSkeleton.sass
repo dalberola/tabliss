@@ -1,0 +1,22 @@
+@keyframes pluginSkeletonFadeIn
+  to
+    opacity: 0.4
+
+@keyframes pluginSkeletonPulse
+  0%
+    opacity: 0.4
+  50%
+    opacity: 0.15
+  100%
+    opacity: 0.4
+
+.PluginSkeleton
+  display: inline-block
+  width: 1.5em
+  height: 1.5em
+  border-radius: 0.25em
+  background: currentColor
+  opacity: 0
+  // Hold invisible for 200 ms, then fade in. If the lazy chunk lands
+  // first the skeleton is never visible at all.
+  animation: pluginSkeletonFadeIn 0.2s ease-out 0.2s forwards, pluginSkeletonPulse 1.5s ease-in-out 0.4s infinite

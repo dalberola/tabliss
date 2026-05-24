@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Build + SFTP upload
+    name: Build + FTP upload
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -47,22 +47,22 @@ jobs:
       - name: Resolve + sanity-check deploy target
         id: target
         env:
-          SFTP_PATH_RAW: ${{ vars.SFTP_PATH || secrets.SFTP_PATH }}
+          FTP_PATH_RAW: ${{ vars.SFTP_PATH || secrets.SFTP_PATH }}
         run: |
           # Strip leading/trailing whitespace (newlines, tabs, spaces).
           # Catches a common paste mistake when populating secrets.
-          SFTP_PATH=$(printf '%s' "$SFTP_PATH_RAW" | tr -d '[:space:]')
+          FTP_PATH=$(printf '%s' "$FTP_PATH_RAW" | tr -d '[:space:]')
 
-          if [ -z "$SFTP_PATH" ]; then
-            echo "::error::SFTP_PATH is empty (after whitespace trim). Set it as a repo Variable or Secret." >&2
+          if [ -z "$FTP_PATH" ]; then
+            echo "::error::Deploy path is empty (after whitespace trim). Set SFTP_PATH as a repo Variable or Secret." >&2
             exit 1
           fi
-          if [ "$SFTP_PATH" = "/" ]; then
-            echo "::error::SFTP_PATH is '/'. Refusing — would risk deleting files outside the intended directory." >&2
+          if [ "$FTP_PATH" = "/" ]; then
+            echo "::error::Deploy path is '/'. Refusing — would risk deleting files outside the intended directory." >&2
             exit 1
           fi
-          if [ "${SFTP_PATH#/}" = "$SFTP_PATH" ]; then
-            echo "::error::SFTP_PATH must be absolute (start with '/'). Got: $SFTP_PATH" >&2
+          if [ "${FTP_PATH#/}" = "$FTP_PATH" ]; then
+            echo "::error::Deploy path must be absolute (start with '/'). Got: $FTP_PATH" >&2
             exit 1
           fi
           if [ ! -d dist/web ] || [ -z "$(ls -A dist/web)" ]; then
@@ -71,62 +71,27 @@ jobs:
           fi
 
           # Make the cleaned value available to the upload step.
-          echo "sftp_path=$SFTP_PATH" >> "$GITHUB_OUTPUT"
-          echo "Will upload $(find dist/web -type f | wc -l | tr -d ' ') files to $SFTP_PATH"
+          echo "ftp_path=$FTP_PATH" >> "$GITHUB_OUTPUT"
+          echo "Will upload $(find dist/web -type f | wc -l | tr -d ' ') files to $FTP_PATH"
 
-      - name: Install lftp + sshpass
-        # sshpass is required because lftp's sftp:// transport invokes the
-        # system ssh client, which doesn't accept a password on the
-        # command line. sshpass feeds the password to ssh via env var.
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp sshpass
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Trust SFTP host key
+      - name: Upload via FTP
         env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          # ssh-keyscan trusts whatever the host presents on first connect.
-          # If you want to harden this, save the expected host key as a
-          # repo secret SFTP_HOST_KEY and validate before appending.
-          # Stderr kept so a failure surfaces in the logs (don't redirect
-          # to /dev/null).
-          ssh-keyscan -H "$SFTP_HOST" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          echo "known_hosts entry count: $(wc -l < ~/.ssh/known_hosts)"
-
-      - name: Probe SFTP auth
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-          SSHPASS: ${{ secrets.SFTP_PASSWORD }}
-        run: |
-          SFTP_USER=$(printf '%s' "$SFTP_USER" | tr -d '[:space:]')
-          SSHPASS=$(printf '%s' "$SSHPASS" | tr -d '[:space:]')
-          export SSHPASS
-          # One-shot non-interactive probe. -o BatchMode=no allows the
-          # password to be supplied; -v gives us verbose handshake output
-          # so we can tell whether the failure is host key, auth, or
-          # something else.
-          echo "Probing $SFTP_USER@(masked) ..."
-          sshpass -e ssh -v -o BatchMode=no -o ConnectTimeout=10 \
-            "$SFTP_USER@$SFTP_HOST" "echo connected ok; exit" 2>&1 | \
-            sed 's|'"$SFTP_HOST"'|***|g' | tail -40
-
-      - name: Upload via SFTP
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-          # SSHPASS is the env var sshpass reads when invoked with -e.
-          # Whitespace is trimmed defensively in case of paste artefacts.
-          SSHPASS: ${{ secrets.SFTP_PASSWORD }}
-          SFTP_PATH: ${{ steps.target.outputs.sftp_path }}
+          # Keeping the SFTP_* secret names for continuity even though
+          # we use the FTP protocol — same credentials, the host accepts
+          # both. To switch to FTPS, change the protocol line below from
+          # `ftp://` to `ftps://` and uncomment the ssl-force settings.
+          FTP_HOST: ${{ secrets.SFTP_HOST }}
+          FTP_USER: ${{ secrets.SFTP_USER }}
+          FTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          FTP_PATH: ${{ steps.target.outputs.ftp_path }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          # Trim whitespace from credentials to catch the same paste
-          # artefact that bit SFTP_PATH earlier.
-          SFTP_USER=$(printf '%s' "$SFTP_USER" | tr -d '[:space:]')
-          SSHPASS=$(printf '%s' "$SSHPASS" | tr -d '[:space:]')
-          export SSHPASS
+          # Trim whitespace from credentials.
+          FTP_USER=$(printf '%s' "$FTP_USER" | tr -d '[:space:]')
+          FTP_PASSWORD=$(printf '%s' "$FTP_PASSWORD" | tr -d '[:space:]')
 
           DRY_FLAG=""
           if [ "$DRY_RUN" = "true" ]; then
@@ -136,26 +101,30 @@ jobs:
 
           # Notes on the mirror flags below:
           # --reverse: push local → remote (mirror's default is the other way)
-          # --delete: remove remote files no longer present locally (within SFTP_PATH only)
+          # --delete: remove remote files no longer present locally (within FTP_PATH only)
           # --verbose: show every transfer
           # --parallel=4: 4 concurrent transfers
-          # --exclude-glob '.*': skip dotfiles
+          # --exclude-glob '.*': skip dotfiles (preserves .htaccess, .env, etc.)
           # By default lftp uploads new files before deleting stale ones,
           # so in-flight requests for the previous deploy can usually
           # complete before their JS chunks disappear.
           #
-          # sftp:connect-program overrides the default openssh sftp
-          # invocation so sshpass can feed the password to ssh.
+          # SECURITY NOTE: plain `ftp://` sends credentials and file
+          # contents over the wire in cleartext. The host accepts FTPS
+          # too — to upgrade, change `ftp://` to `ftps://` and uncomment
+          # the two ssl-force lines below.
           lftp -c "
-            set sftp:auto-confirm yes;
-            set sftp:connect-program 'sshpass -e ssh -a -x -o StrictHostKeyChecking=yes';
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
-            open -u '$SFTP_USER',xxx sftp://$SFTP_HOST;
+            set net:timeout 30;
+            set ftp:passive-mode yes;
+            # set ftp:ssl-force yes;
+            # set ftp:ssl-protect-data yes;
+            open -u '$FTP_USER','$FTP_PASSWORD' ftp://$FTP_HOST;
             mirror --reverse --delete --verbose --parallel=4 \
               --exclude-glob '.*' \
               $DRY_FLAG \
-              dist/web/ '$SFTP_PATH';
+              dist/web/ '$FTP_PATH';
             bye
           "
 
@@ -168,5 +137,6 @@ jobs:
             echo "**Mode:** dry-run (no changes made on the server)" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "**Mode:** live" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Protocol:** FTP" >> "$GITHUB_STEP_SUMMARY"
             echo "**Bundle hash:** $(ls dist/web/main.*.js 2>/dev/null | sed 's|.*main\.||;s|\.js$||')" >> "$GITHUB_STEP_SUMMARY"
           fi

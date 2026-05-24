@@ -6,9 +6,14 @@ import { migrate } from "../db/migrate";
 import { cacheStorage, dbStorage } from "../db/state";
 import { Stream } from "../lib";
 import { Dashboard } from "./dashboard";
-import { Settings } from "./settings";
 import Errors from "./shared/Errors";
 import StoreError from "./shared/StoreError";
+
+const Settings = React.lazy(() =>
+  import(/* webpackChunkName: "settings" */ "./settings").then((mod) => ({
+    default: mod.Settings,
+  })),
+);
 
 const messages = defineMessages({
   pageTitle: {
@@ -96,7 +101,11 @@ const Root: React.FC = () => {
   return (
     <>
       {ready ? <Dashboard /> : null}
-      {ready && settings ? <Settings /> : null}
+      {ready && settings ? (
+        <React.Suspense fallback={null}>
+          <Settings />
+        </React.Suspense>
+      ) : null}
       {errors ? <Errors onClose={toggleErrors} /> : null}
       {error ? <StoreError onClose={() => setError(false)} /> : null}
     </>

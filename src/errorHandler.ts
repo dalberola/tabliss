@@ -1,29 +1,21 @@
-import { init, captureException, setTag } from "@sentry/browser";
+let captureImpl: ((error: Error) => void) | null = null;
+const queued: Error[] = [];
 
 export function register(): void {
-  init({
-    autoSessionTracking: false, // Wtf sentry
-    dsn: "https://2e0e75c7477c4c3e9572ee97241e569c@o113629.ingest.sentry.io/250221",
-    enabled: !DEV,
-    release: VERSION,
+  import(/* webpackChunkName: "sentry" */ "./errorHandlerImpl").then((mod) => {
+    mod.register();
+    captureImpl = mod.capture;
+    while (queued.length) {
+      const err = queued.shift();
+      if (err) captureImpl(err);
+    }
   });
-  setTag("target", BUILD_TARGET);
 }
 
 export function capture(error: Error): void {
-  if (error.stack) {
-    // Replace firefox extension URLs
-    error.stack = error.stack.replace(
-      /moz-extension:\/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g,
-      "resource://tabliss-extension",
-    );
-
-    // Replace chrome extension URLs
-    error.stack = error.stack.replace(
-      /chrome-extension:\/\/hipekcciheckooncpjeljhnekcoolahp/g,
-      "resource://tabliss-extension",
-    );
+  if (captureImpl) {
+    captureImpl(error);
+  } else {
+    queued.push(error);
   }
-
-  captureException(error);
 }

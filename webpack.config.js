@@ -35,10 +35,14 @@ const config = {
       },
       {
         test: /\.(gif|jpe?g|png)$/,
-        loader: "url-loader",
-        options: {
-          limit: 10000,
-          name: isWeb ? "[name].[contenthash:12].[ext]" : "[name].[ext]",
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10000,
+          },
+        },
+        generator: {
+          filename: isWeb ? "[name].[contenthash:12][ext]" : "[name][ext]",
         },
       },
       {
@@ -47,7 +51,7 @@ const config = {
       },
       {
         test: /\.svg$/,
-        loader: "raw-loader",
+        type: "asset/source",
       },
       {
         test: /\.(ts|tsx)$/,
@@ -82,6 +86,19 @@ const config = {
     }),
   ],
   devtool: isWeb || !isProduction ? "source-map" : false,
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "initial",
+          priority: 10,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   stats: {
     warnings: false,
   },

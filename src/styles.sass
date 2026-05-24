@@ -1,14 +1,63 @@
 *
     box-sizing: border-box
 
+// =============================================================================
+// Theme tokens
+// =============================================================================
+// Standardised colour / shadow tokens consumed across the UI. The default
+// values are the legacy light palette; the dark overrides flip them.
+//
+// `html.theme-dark` is set by Dashboard.tsx whenever the active background's
+// luminosity is low. `@media (prefers-color-scheme: dark)` provides a
+// fallback for the very first paint before the dashboard mounts.
+
+html
+    --surface: white
+    --surface-raised: #ecf0f1
+    --surface-control: white
+    --surface-control-on-card: white
+    --text-primary: #5a636a
+    --text-heading: #212121
+    --border-subtle: #bdc3c7
+    --border-faint: #ecf0f1
+    --button-icon-bg: #ecf0f1
+    --button-icon-bg-hover: #bdc3c7
+    --button-icon-fg: black
+    --scrim: rgba(0, 0, 0, 0.25)
+    --shadow-elevated: 0 0.5rem 1rem rgba(0, 0, 0, 0.25)
+
+@mixin dark-theme-tokens
+    --surface: #1f1f1f
+    --surface-raised: #2a2a2a
+    --surface-control: #2a2a2a
+    --surface-control-on-card: #1f1f1f
+    --text-primary: #d0d0d0
+    --text-heading: #f5f5f5
+    --border-subtle: #3a3a3a
+    --border-faint: #3a3a3a
+    --button-icon-bg: #2a2a2a
+    --button-icon-bg-hover: #3a3a3a
+    --button-icon-fg: #f5f5f5
+    --scrim: rgba(0, 0, 0, 0.55)
+    --shadow-elevated: 0 0.5rem 1rem rgba(0, 0, 0, 0.6)
+
+html.theme-dark
+    @include dark-theme-tokens
+
+@media (prefers-color-scheme: dark)
+    html:not(.theme-light)
+        @include dark-theme-tokens
+
+// =============================================================================
+
 html, body
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif
     font-size: 14px
     line-height: 1.25
-    color: #5a636a
+    color: var(--text-primary)
 
-// Handle init background color, before settings are loaded
-// Fallback to system theme
+// Handle init background color, before settings are loaded.
+// Fallback to system theme.
 html
     background-color: black
 @media (prefers-color-scheme: light)

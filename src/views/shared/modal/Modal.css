@@ -1,5 +1,5 @@
 .Modal-container {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--scrim);
   position: fixed;
   top: 0;
   right: 0;
@@ -12,11 +12,13 @@
 }
 
 .Modal {
-  background: white;
+  background: var(--surface);
+  color: var(--text-primary);
   border-radius: 1rem 1rem 0 0;
   padding: 2rem;
   min-width: 300px;
   max-width: 500px;
+  box-shadow: var(--shadow-elevated);
 }
 
 .Modal-footer {

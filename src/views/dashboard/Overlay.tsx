@@ -38,6 +38,8 @@ const messages = defineMessages({
   },
 });
 
+const noop = () => {};
+
 const Overlay: React.FC = () => {
   const translated = useFormatMessages(messages);
   const focus = useValue(db, "focus");
@@ -47,9 +49,8 @@ const Overlay: React.FC = () => {
   useKeyPress(toggleFocus, ["w"]);
   useKeyPress(toggleSettings, ["s"]);
 
-  // Hooks inside a condition? Works because the condition always resolves the same
   const [isFullscreen, handleToggleFullscreen] = useFullscreen();
-  if (handleToggleFullscreen) useKeyPress(handleToggleFullscreen, ["f"]);
+  useKeyPress(handleToggleFullscreen || noop, ["f"]);
 
   return (
     <div className="Overlay">

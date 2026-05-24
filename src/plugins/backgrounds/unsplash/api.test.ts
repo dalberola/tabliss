@@ -1,5 +1,4 @@
-// @ts-nocheck
-(global as any).UNSPLASH_API_KEY = "test-key";
+(globalThis as Record<string, unknown>).UNSPLASH_API_KEY = "test-key";
 
 import { calculateWidth, fetchImages } from "./api";
 
@@ -16,13 +15,13 @@ describe("unsplash/api", () => {
   });
 
   describe("fetchImages error handling", () => {
-    const originalFetch = global.fetch;
+    const originalFetch = globalThis.fetch;
     afterEach(() => {
-      global.fetch = originalFetch;
+      globalThis.fetch = originalFetch;
     });
 
     it("throws a readable error on non-OK responses", async () => {
-      global.fetch = jest.fn().mockResolvedValue({
+      globalThis.fetch = jest.fn().mockResolvedValue({
         ok: false,
         status: 401,
         statusText: "Unauthorized",
@@ -35,7 +34,7 @@ describe("unsplash/api", () => {
     });
 
     it("throws when the body is not an array (e.g. error envelope on 200)", async () => {
-      global.fetch = jest.fn().mockResolvedValue({
+      globalThis.fetch = jest.fn().mockResolvedValue({
         ok: true,
         status: 200,
         statusText: "OK",

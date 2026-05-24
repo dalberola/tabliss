@@ -25,9 +25,11 @@ function updateSelectedCategories(
 
   categories.delete("any");
 
-  checked
-    ? categories.add(updatedCategory)
-    : categories.delete(updatedCategory);
+  if (checked) {
+    categories.add(updatedCategory);
+  } else {
+    categories.delete(updatedCategory);
+  }
 
   return categories;
 }

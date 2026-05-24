@@ -13,9 +13,11 @@ const Links: FC<Props> = ({ data = defaultData }) => {
     ({ key }) => {
       const index = Number(key) - 1;
       if (data.links[index]) {
-        data.linkOpenStyle
-          ? window.open(data.links[index].url, "_blank")
-          : window.location.assign(data.links[index].url);
+        if (data.linkOpenStyle) {
+          window.open(data.links[index].url, "_blank");
+        } else {
+          window.location.assign(data.links[index].url);
+        }
       }
     },
     ["1", "2", "3", "4", "5", "6", "7", "8", "9"],

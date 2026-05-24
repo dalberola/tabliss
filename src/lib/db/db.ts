@@ -30,10 +30,10 @@ export const init = <T = Shape>(def?: T): Database<T> => {
  * WARNING: These types can lie to you. Without schema support, invalid data may be saved in storage.
  */
 export const get = <T, K extends Key<T>>(db: Snapshot<T>, key: K): T[K] => {
-  // @ts-ignore
+  // @ts-expect-error -- cache.get returns T[K]|undefined but caller narrows via .has
   if (db.cache.has(key)) return db.cache.get(key);
   if (db.parent) return get(db.parent, key);
-  // @ts-ignore
+  // @ts-expect-error -- intentional undefined fallback; see TODO below about throwing
   return undefined;
   // TODO: consider throwing, may require tombstones to work correctly
   // throw new NotFoundError(key);
@@ -51,7 +51,7 @@ export const prefix = function* <T, P extends Prefix<keyof T> | "">(
     if (key.startsWith(path)) {
       if (seen.has(key)) continue;
       seen.add(key);
-      // @ts-ignore
+      // @ts-expect-error -- key/val narrowing across the generator boundary is too loose
       yield [key, val];
     }
   }

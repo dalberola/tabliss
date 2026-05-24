@@ -93,6 +93,16 @@ jobs:
           FTP_USER=$(printf '%s' "$FTP_USER" | tr -d '[:space:]')
           FTP_PASSWORD=$(printf '%s' "$FTP_PASSWORD" | tr -d '[:space:]')
 
+          # GitHub Actions only masks secrets by exact value match. lftp
+          # logs URLs in verbose mode with credentials URL-encoded — the
+          # encoded form differs from the raw secret and slips past the
+          # mask. Register the URL-encoded variants explicitly.
+          encode() { python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$1"; }
+          ENC_USER=$(encode "$FTP_USER")
+          ENC_PASS=$(encode "$FTP_PASSWORD")
+          echo "::add-mask::$ENC_USER"
+          echo "::add-mask::$ENC_PASS"
+
           DRY_FLAG=""
           if [ "$DRY_RUN" = "true" ]; then
             DRY_FLAG="--dry-run"

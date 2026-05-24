@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Message from "./Message";
-import MessageSettings from "./MessageSettings";
-
 const config: Config = {
   key: "widget/message",
   name: "Message",
   description: "Add your own text.",
-  dashboardComponent: Message,
-  settingsComponent: MessageSettings,
+  dashboardComponent: lazy(() => import("./Message")),
+  settingsComponent: lazy(() => import("./MessageSettings")),
 };
 
 export default config;

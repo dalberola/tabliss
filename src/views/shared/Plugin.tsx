@@ -14,7 +14,11 @@ const Plugin: React.FC<Props> = ({ id, component: Component }) => {
   // Create plugin API
   const api = useApi(id);
 
-  return <Component {...api} />;
+  return (
+    <React.Suspense fallback={null}>
+      <Component {...api} />
+    </React.Suspense>
+  );
 };
 
 export default withErrorBoundary(Plugin, {

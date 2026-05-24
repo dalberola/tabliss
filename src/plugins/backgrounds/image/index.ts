@@ -1,13 +1,11 @@
+import { lazy } from "react";
 import { Config } from "../../types";
-import Image from "./Image";
-import ImageSettings from "./ImageSettings";
-
 const config: Config = {
   key: "background/image",
   name: "Upload Images",
   description: "See your own images.",
-  dashboardComponent: Image,
-  settingsComponent: ImageSettings,
+  dashboardComponent: lazy(() => import("./Image")),
+  settingsComponent: lazy(() => import("./ImageSettings")),
   supportsBackdrop: true,
 };
 

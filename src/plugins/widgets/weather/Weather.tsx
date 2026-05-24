@@ -1,6 +1,12 @@
 import React from "react";
 import { defineMessages } from "react-intl";
-import { useCachedEffect, useFormatMessages, useTime } from "../../../hooks";
+
+import {
+  useCachedEffect,
+  useFormatMessages,
+  usePluginData,
+  useTime,
+} from "../../../hooks";
 import { HOURS } from "../../../utils";
 import { Icon } from "../../../views/shared";
 import { getForecast } from "./api";
@@ -8,13 +14,9 @@ import { findCurrent, weatherCodes } from "./conditions";
 import { defaultData, Props } from "./types";
 import "./Weather.sass";
 
-const Weather: React.FC<Props> = ({
-  cache,
-  data = defaultData,
-  loader,
-  setCache,
-  setData,
-}) => {
+const Weather: React.FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
+  const { cache, loader, setCache } = api;
   const time = useTime("absolute");
   const translated = useFormatMessages(messages);
 
@@ -39,7 +41,7 @@ const Weather: React.FC<Props> = ({
     <div className="Weather">
       <div
         className="summary"
-        onClick={() => setData({ ...data, showDetails: !data.showDetails })}
+        onClick={() => patch({ showDetails: !data.showDetails })}
         title="Toggle weather details"
       >
         {data.name ? <span>{data.name}</span> : null}

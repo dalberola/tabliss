@@ -1,6 +1,7 @@
 import React from "react";
-import { MINUTES, HOURS } from "../../../utils";
 
+import { usePluginData } from "../../../hooks";
+import { MINUTES, HOURS } from "../../../utils";
 import categories from "./categories";
 import { Props, defaultData, JokeAPICategory } from "./types";
 
@@ -31,7 +32,9 @@ function updateSelectedCategories(
   return categories;
 }
 
-const JokeSettings: React.FC<Props> = ({ data = defaultData, setData }) => {
+const JokeSettings: React.FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
+
   return (
     <div className="JokeSettings">
       <h5>Daily Joke</h5>
@@ -40,9 +43,7 @@ const JokeSettings: React.FC<Props> = ({ data = defaultData, setData }) => {
         Show a new joke
         <select
           value={data.timeout}
-          onChange={(event) =>
-            setData({ ...data, timeout: Number(event.target.value) })
-          }
+          onChange={(event) => patch({ timeout: Number(event.target.value) })}
         >
           <option value={5 * MINUTES}>Every 5 minutes</option>
           <option value={15 * MINUTES}>Every 15 minutes</option>
@@ -66,7 +67,7 @@ const JokeSettings: React.FC<Props> = ({ data = defaultData, setData }) => {
                     event.target.checked,
                   );
 
-                  setData({ ...data, categories });
+                  patch({ categories });
                 }}
               />{" "}
               {category.name}

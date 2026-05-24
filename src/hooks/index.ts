@@ -5,6 +5,7 @@ export * from "./useFormatMessages";
 export * from "./useFullscreen";
 export * from "./useKeyPress";
 export * from "./useObjectUrl";
+export * from "./usePluginData";
 export * from "./useSavedReducer";
 export * from "./useTime";
 export * from "./useToggle";

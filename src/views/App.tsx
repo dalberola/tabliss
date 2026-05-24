@@ -8,6 +8,7 @@ import { Stream } from "../lib";
 import { Dashboard } from "./dashboard";
 import Errors from "./shared/Errors";
 import StoreError from "./shared/StoreError";
+import UpdateBanner from "./shared/UpdateBanner";
 
 const Settings = React.lazy(() =>
   import(/* webpackChunkName: "settings" */ "./settings").then((mod) => ({
@@ -108,6 +109,7 @@ const App: React.FC = () => {
       ) : null}
       {errors ? <Errors onClose={toggleErrors} /> : null}
       {error ? <StoreError onClose={() => setError(false)} /> : null}
+      <UpdateBanner />
     </>
   );
 };

@@ -8,6 +8,12 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
+/**
+ * Event dispatched on `window` when a new service worker has installed and
+ * cached fresh content. The UI listens for this to prompt the user to reload.
+ */
+export const SW_UPDATE_EVENT = "tabliss:sw-update";
+
 export function register() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
@@ -24,15 +30,12 @@ export function register() {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === "installed") {
                 if (navigator.serviceWorker.controller) {
-                  // At this point, the old content will have been purged and
-                  // the fresh content will have been added to the cache.
-                  // It's the perfect time to display a "New content is
-                  // available; please refresh." message in your web app.
+                  // Fresh content has been precached; prompt the UI to
+                  // surface a reload affordance to the user.
                   console.log("New content is available; please refresh.");
+                  window.dispatchEvent(new Event(SW_UPDATE_EVENT));
                 } else {
-                  // At this point, everything has been precached.
-                  // It's the perfect time to display a
-                  // "Content is cached for offline use." message.
+                  // First install. Everything is cached for offline use.
                   console.log("Content is cached for offline use.");
                 }
               }

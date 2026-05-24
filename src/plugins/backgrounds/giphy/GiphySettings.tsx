@@ -1,39 +1,44 @@
 import React, { FC } from "react";
 
-import { Props, defaultData } from "./types";
+import { usePluginData } from "../../../hooks";
 import { DebounceInput } from "../../shared";
+import { Props, defaultData } from "./types";
 
-const GiphySettings: FC<Props> = ({ data = defaultData, setData }) => (
-  <div className="GiphySettings">
-    <label>
-      Tag
-      <DebounceInput
-        type="text"
-        value={data.tag}
-        onChange={(value) => setData({ ...data, tag: value })}
-        wait={500}
-      />
-    </label>
-    <p className="info">Separate multiple tags with a comma</p>
+const GiphySettings: FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
 
-    <label>
-      <input
-        type="checkbox"
-        checked={data.expand}
-        onChange={(event) => setData({ ...data, expand: !data.expand })}
-      />{" "}
-      Stretch to fill screen
-    </label>
+  return (
+    <div className="GiphySettings">
+      <label>
+        Tag
+        <DebounceInput
+          type="text"
+          value={data.tag}
+          onChange={(value) => patch({ tag: value })}
+          wait={500}
+        />
+      </label>
+      <p className="info">Separate multiple tags with a comma</p>
 
-    <label>
-      <input
-        type="checkbox"
-        checked={!data.nsfw}
-        onChange={(event) => setData({ ...data, nsfw: !data.nsfw })}
-      />{" "}
-      Safe Search
-    </label>
-  </div>
-);
+      <label>
+        <input
+          type="checkbox"
+          checked={data.expand}
+          onChange={() => patch({ expand: !data.expand })}
+        />{" "}
+        Stretch to fill screen
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          checked={!data.nsfw}
+          onChange={() => patch({ nsfw: !data.nsfw })}
+        />{" "}
+        Safe Search
+      </label>
+    </div>
+  );
+};
 
 export default GiphySettings;

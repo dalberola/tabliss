@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 
-import { useSavedReducer } from "../../../hooks";
+import { usePluginData, useSavedReducer } from "../../../hooks";
 import Input from "./Input";
 import { addLink, removeLink, reorderLink, updateLink } from "./actions";
 import { reducer } from "./reducer";
 import { Link, Props, defaultData } from "./types";
 
-const LinksSettings: FC<Props> = ({ data = defaultData, setData }) => {
-  const saveLinks = (links: Link[]) => setData({ ...data, links });
+const LinksSettings: FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
+  const saveLinks = (links: Link[]) => patch({ links });
   const dispatch = useSavedReducer(reducer, data.links, saveLinks);
 
   return (
@@ -17,9 +18,7 @@ const LinksSettings: FC<Props> = ({ data = defaultData, setData }) => {
         <input
           type="number"
           value={data.columns}
-          onChange={(event) =>
-            setData({ ...data, columns: Number(event.target.value) })
-          }
+          onChange={(event) => patch({ columns: Number(event.target.value) })}
           min={1}
         />
       </label>
@@ -28,7 +27,7 @@ const LinksSettings: FC<Props> = ({ data = defaultData, setData }) => {
         <input
           type="checkbox"
           checked={data.visible}
-          onChange={() => setData({ ...data, visible: !data.visible })}
+          onChange={() => patch({ visible: !data.visible })}
         />
         Links are always visible
       </label>
@@ -37,9 +36,7 @@ const LinksSettings: FC<Props> = ({ data = defaultData, setData }) => {
         <input
           type="checkbox"
           checked={data.linkOpenStyle}
-          onChange={() =>
-            setData({ ...data, linkOpenStyle: !data.linkOpenStyle })
-          }
+          onChange={() => patch({ linkOpenStyle: !data.linkOpenStyle })}
         />
         Links open in a new tab
       </label>

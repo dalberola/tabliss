@@ -1,17 +1,23 @@
 import React, { FC } from "react";
 
-import { useKeyPress, useSavedReducer, useToggle } from "../../../hooks";
+import {
+  useKeyPress,
+  usePluginData,
+  useSavedReducer,
+  useToggle,
+} from "../../../hooks";
 import { DownIcon, Icon, UpIcon, ExpandIcon } from "../../../views/shared";
 import { addTodo, removeTodo, toggleTodo, updateTodo } from "./actions";
 import { reducer, State } from "./reducer";
 import TodoList from "./TodoList";
 import { defaultData, Props } from "./types";
 
-const Todo: FC<Props> = ({ data = defaultData, setData }) => {
+const Todo: FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
   const [showCompleted, toggleShowCompleted] = useToggle();
   const [showMore, toggleShowMore] = useToggle();
 
-  const setItems = (items: State) => setData({ ...data, items });
+  const setItems = (items: State) => patch({ items });
   const dispatch = useSavedReducer(reducer, data.items, setItems);
 
   const items = data.items.filter((item) => !item.completed || showCompleted);

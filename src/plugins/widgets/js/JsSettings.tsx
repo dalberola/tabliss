@@ -1,10 +1,12 @@
 import React, { FC, useState } from "react";
 
+import { usePluginData } from "../../../hooks";
 import { Props, defaultData } from "./types";
 
-const JsSettings: FC<Props> = ({ data = defaultData, setData }) => {
+const JsSettings: FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
   const [input, setInput] = useState(data.input);
-  const handleSave = () => setData({ input });
+  const handleSave = () => patch({ input });
 
   return (
     <div className="JsSettings">

@@ -5,9 +5,43 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-05-24
+
+A modernization release focused on dependency updates, build-system cleanup, and a substantial first-paint performance improvement. No user-visible feature changes.
+
 ### Fixed
 
 - Updated IP Info widget with a more reliable service and more frequent updates
+- Unsplash background no longer crashes the page when the API returns an error envelope (e.g. when `UNSPLASH_API_KEY` is missing or invalid). Errors now surface through the existing plugin error boundary instead of throwing `TypeError: body.map is not a function`.
+
+### Changed
+
+- First-paint bundle reduced from 638 KB → 189 KB by lazy-loading Sentry, lazy-loading the Settings panel, and splitting `node_modules` into a cacheable vendors chunk.
+- Migrated deprecated Sass `darken()` calls to `color.adjust(..., $lightness: -X%)`.
+- Switched from deprecated webpack 4 loaders (`file-loader`, `url-loader`, `raw-loader`) to webpack 5 Asset Modules.
+- Removed unused `webpack-ext-reloader` (abandoned upstream).
+- Added `.nvmrc`, `engines.node >=20.9.0`, and a `browserslist` config.
+
+### Dependencies
+
+- React 18 → 19
+- react-intl 6 → 10
+- Jest 29 → 30
+- TypeScript 5.3 → 5.9
+- webpack-dev-server 4 → 5
+- sass-loader 14 → 17 (modern Dart Sass API)
+- copy-webpack-plugin 12 → 14
+- node-sass → sass
+- Various patch/minor bumps across the dep tree
+
+### CI
+
+- Runner upgraded from Node 16 (EOL) to Node 20 LTS.
+- All GitHub Actions bumped: `checkout`@v2 → v4, `setup-node`@v2 → v4, `upload-artifact`@v3 → v4.
+
+### Security
+
+- `npm audit` findings: 33 → 3. High-severity CVEs: 12 → 0. The 3 remaining are all transitive in `webpack-dev-server`'s bundled sockjs fallback; dev-only, never shipped to users.
 
 ## [2.6.0] - 2022-04-25
 

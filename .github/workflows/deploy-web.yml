@@ -74,8 +74,11 @@ jobs:
           echo "sftp_path=$SFTP_PATH" >> "$GITHUB_OUTPUT"
           echo "Will upload $(find dist/web -type f | wc -l | tr -d ' ') files to $SFTP_PATH"
 
-      - name: Install lftp
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Install lftp + sshpass
+        # sshpass is required because lftp's sftp:// transport invokes the
+        # system ssh client, which doesn't accept a password on the
+        # command line. sshpass feeds the password to ssh via env var.
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp sshpass
 
       - name: Trust SFTP host key
         env:
@@ -92,10 +95,18 @@ jobs:
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
-          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          # SSHPASS is the env var sshpass reads when invoked with -e.
+          # Whitespace is trimmed defensively in case of paste artefacts.
+          SSHPASS: ${{ secrets.SFTP_PASSWORD }}
           SFTP_PATH: ${{ steps.target.outputs.sftp_path }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
+          # Trim whitespace from credentials to catch the same paste
+          # artefact that bit SFTP_PATH earlier.
+          SFTP_USER=$(printf '%s' "$SFTP_USER" | tr -d '[:space:]')
+          SSHPASS=$(printf '%s' "$SSHPASS" | tr -d '[:space:]')
+          export SSHPASS
+
           DRY_FLAG=""
           if [ "$DRY_RUN" = "true" ]; then
             DRY_FLAG="--dry-run"
@@ -111,11 +122,15 @@ jobs:
           # By default lftp uploads new files before deleting stale ones,
           # so in-flight requests for the previous deploy can usually
           # complete before their JS chunks disappear.
+          #
+          # sftp:connect-program overrides the default openssh sftp
+          # invocation so sshpass can feed the password to ssh.
           lftp -c "
             set sftp:auto-confirm yes;
+            set sftp:connect-program 'sshpass -e ssh -a -x -o StrictHostKeyChecking=yes';
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
-            open -u '$SFTP_USER','$SFTP_PASSWORD' sftp://$SFTP_HOST;
+            open -u '$SFTP_USER',xxx sftp://$SFTP_HOST;
             mirror --reverse --delete --verbose --parallel=4 \
               --exclude-glob '.*' \
               $DRY_FLAG \

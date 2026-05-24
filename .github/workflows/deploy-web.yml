@@ -44,18 +44,34 @@ jobs:
       - name: Build web target
         run: npm run build:web
 
-      - name: Sanity-check deploy target
+      - name: Resolve + sanity-check deploy target
+        id: target
         env:
-          SFTP_PATH: ${{ vars.SFTP_PATH || secrets.SFTP_PATH }}
+          SFTP_PATH_RAW: ${{ vars.SFTP_PATH || secrets.SFTP_PATH }}
         run: |
-          if [ -z "$SFTP_PATH" ] || [ "$SFTP_PATH" = "/" ]; then
-            echo "::error::SFTP_PATH is empty or '/'. Refusing to deploy — would risk deleting files outside the intended directory." >&2
+          # Strip leading/trailing whitespace (newlines, tabs, spaces).
+          # Catches a common paste mistake when populating secrets.
+          SFTP_PATH=$(printf '%s' "$SFTP_PATH_RAW" | tr -d '[:space:]')
+
+          if [ -z "$SFTP_PATH" ]; then
+            echo "::error::SFTP_PATH is empty (after whitespace trim). Set it as a repo Variable or Secret." >&2
+            exit 1
+          fi
+          if [ "$SFTP_PATH" = "/" ]; then
+            echo "::error::SFTP_PATH is '/'. Refusing — would risk deleting files outside the intended directory." >&2
+            exit 1
+          fi
+          if [ "${SFTP_PATH#/}" = "$SFTP_PATH" ]; then
+            echo "::error::SFTP_PATH must be absolute (start with '/'). Got: $SFTP_PATH" >&2
             exit 1
           fi
           if [ ! -d dist/web ] || [ -z "$(ls -A dist/web)" ]; then
             echo "::error::dist/web is missing or empty. Build must have failed silently." >&2
             exit 1
           fi
+
+          # Make the cleaned value available to the upload step.
+          echo "sftp_path=$SFTP_PATH" >> "$GITHUB_OUTPUT"
           echo "Will upload $(find dist/web -type f | wc -l | tr -d ' ') files to $SFTP_PATH"
 
       - name: Install lftp
@@ -77,7 +93,7 @@ jobs:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
-          SFTP_PATH: ${{ vars.SFTP_PATH || secrets.SFTP_PATH }}
+          SFTP_PATH: ${{ steps.target.outputs.sftp_path }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
           DRY_FLAG=""

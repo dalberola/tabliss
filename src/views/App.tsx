@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
 });
 
-const Root: React.FC = () => {
+const App: React.FC = () => {
   // Set page title
   const intl = useIntl();
   React.useEffect(() => {
@@ -112,4 +112,4 @@ const Root: React.FC = () => {
   );
 };
 
-export default Root;
+export default App;

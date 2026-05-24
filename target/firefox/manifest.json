@@ -7,7 +7,7 @@
   "applications": {
     "gecko": {
       "id": "extension@tabliss.io",
-      "strict_min_version": "54.0"
+      "strict_min_version": "91.0"
     }
   },
   "chrome_settings_overrides": {

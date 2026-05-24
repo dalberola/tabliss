@@ -57,10 +57,12 @@ jobs:
             echo "::error::Deploy path is empty (after whitespace trim). Set SFTP_PATH as a repo Variable or Secret." >&2
             exit 1
           fi
-          if [ "$FTP_PATH" = "/" ]; then
-            echo "::error::Deploy path is '/'. Refusing — would risk deleting files outside the intended directory." >&2
-            exit 1
-          fi
+          # Note on '/': on shared hosting the FTP user is typically chrooted to
+          # the site's web root. '/' here means "your FTP-visible root" — it
+          # cannot escape the chroot. Earlier validation rejected '/' on the
+          # assumption it meant filesystem root; that broke the chrooted case
+          # (resulting in nested sites/diginaut.es/sites/diginaut.es paths).
+          # Accept '/' and any other absolute path now.
           if [ "${FTP_PATH#/}" = "$FTP_PATH" ]; then
             echo "::error::Deploy path must be absolute (start with '/'). Got: $FTP_PATH" >&2
             exit 1

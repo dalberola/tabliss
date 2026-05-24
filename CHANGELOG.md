@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.8.1] - 2026-05-24
+
+A polish + bug-fix release. Three more latent bugs surfaced during a hooks-lint triage and are fixed here.
+
+### Fixed
+
+- **Memory leak in the Image background** (sibling of the 2.8.0 fix). `useObjectUrls` was leaking a batch of blob URLs every time the image list changed. The cleanup callback closed over the `urls` state at effect-run time — which is always `[]` because `setUrls` is queued after the URLs are created. Now captures the created URLs locally.
+- **Debounced inputs ignored mid-flight delay changes.** `useDebounce` excluded `delay` from its effect deps, so changing the delay while a timer was queued kept using the old value. Now re-arms on change.
+- **Stale callback in `DebounceInput`.** The debounced effect captured `onChange` from the first render and never picked up subsequent ones. Fixed via a ref pattern.
+- **Broken PWA install icon for the web build.** `pwa.json` referenced `icons/icon-128.png`, which doesn't exist. The actual filename is `128.png`. Now declares all four sizes we ship.
+
+### Added
+
+- **Reload prompt when the service worker has new content.** Previously the service worker would silently install a new app bundle and log a console message — users had to know to refresh. Now a small dismissible banner appears at the bottom of the page with a Reload button.
+- **Suspense loading indicator for lazy-loaded plugins.** Replaces the bare `null` fallback with a delay-rendered (200 ms) pulsing skeleton, so fast loads still look instant but slow loads get visual feedback.
+
+### Changed
+
+- **Web target accessibility:** removed `maximum-scale=1, user-scalable=no` from the viewport so pinch-zoom works on mobile.
+- **Web target meta:** added `description`, `color-scheme`, modern `<link rel="icon">` entries, and an `apple-touch-icon`.
+- **PWA manifest:** added `description`, `scope`, `orientation`, `categories`, and `lang` fields for richer install cards.
+- **Web target startup:** inlined the 2-line `theme.js` snippet into the document head (one fewer HTTP request) and gave the document a static `<title>Tabliss</title>` so first paint isn't blank.
+- **Lint hygiene:** all 23 pre-existing `react-hooks/exhaustive-deps` warnings have been triaged. Intentional patterns are documented per-call-site; CI now reports zero ESLint warnings.
+
 ## [2.8.0] - 2026-05-24
 
 A code-quality release driven by a structural audit. Four latent bugs were caught and fixed along the way; no user-visible feature changes.

@@ -65,10 +65,14 @@ module.exports = tseslint.config(
       // Hooks correctness.
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      // Allow leading underscore for intentionally-unused params/vars.
+      // Allow leading underscore for intentionally-unused params/vars/errors.
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
       ],
       // `any` is used in a few migration / parsing spots already.
       "@typescript-eslint/no-explicit-any": "off",

@@ -19,6 +19,10 @@ const Giphy: React.FC<Props> = ({
     getGif(config, loader).then(setCache);
     if (mounted.current || !gif) getGif(config, loader).then(setGif);
     mounted.current = true;
+    // Re-fetch only when the user-visible config changes; `gif`/`loader`/
+    // `setCache` are read through closures (stable enough; loader is
+    // recreated each render but inclusion would cause a fetch loop).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.tag, data.nsfw]);
 
   const url = useObjectUrl(gif && gif.data);

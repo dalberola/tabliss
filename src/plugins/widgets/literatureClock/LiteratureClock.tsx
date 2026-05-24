@@ -15,6 +15,8 @@ const LiteratureClock: FC<Props> = ({
 
   useEffect(() => {
     getQuoteByTimeCode(timeCode).then(setCache);
+    // Re-fetch on minute change; setCache is from the plugin API closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeCode]);
 
   if (!cache) {

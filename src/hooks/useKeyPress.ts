@@ -14,21 +14,20 @@ export function useKeyPress(
   detectKeys: string[],
   ignoreInputEvents = true,
 ) {
-  const handler = (event: KeyboardEvent) => {
-    if (
-      detectKeys.includes(event.key) &&
-      !(ignoreInputEvents && isInputEvent(event)) &&
-      !(event.ctrlKey || event.metaKey || event.altKey)
-    ) {
-      callback(event);
-    }
-  };
-
   useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (
+        detectKeys.includes(event.key) &&
+        !(ignoreInputEvents && isInputEvent(event)) &&
+        !(event.ctrlKey || event.metaKey || event.altKey)
+      ) {
+        callback(event);
+      }
+    };
     window.addEventListener("keydown", handler);
 
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [ignoreInputEvents, callback]);
+  }, [callback, detectKeys, ignoreInputEvents]);
 }

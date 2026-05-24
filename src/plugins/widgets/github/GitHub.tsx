@@ -16,6 +16,9 @@ const GitHubCalendarWidget: FC<Props> = ({ data = defaultData, loader }) => {
     }).finally(() => {
       loader.pop();
     });
+    // Re-render the calendar only when the user-visible config changes;
+    // loader is recreated each render and would cause a re-fetch loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.username, data.showSummary]);
 
   return (

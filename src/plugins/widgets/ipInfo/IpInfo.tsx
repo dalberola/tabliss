@@ -10,8 +10,10 @@ const IpInfo: React.FC<Props> = ({
   loader,
 }) => {
   const pushError = usePushError();
+  // One-shot fetch on mount.
   React.useEffect(() => {
     getIpInfo(loader).then(setCache).catch(pushError);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!cache) {

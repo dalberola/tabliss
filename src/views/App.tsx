@@ -95,6 +95,11 @@ const App: React.FC = () => {
         if (cacheSub) cacheSub();
       });
     };
+    // Storage subscriptions are intentionally mount-once. handleError is
+    // recreated each render but is only invoked via the persistent
+    // subscriptions, which capture the closure that was current when
+    // they were set up — that's the desired behaviour.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { errors, settings, toggleErrors } = React.useContext(UiContext);

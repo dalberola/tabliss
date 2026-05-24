@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-05-24
+
+A code-quality release driven by a structural audit. Four latent bugs were caught and fixed along the way; no user-visible feature changes.
+
+### Fixed
+
+- **Memory leak in image-based backgrounds.** The `useObjectUrl` hook was creating a cleanup callback but never returning it from `useEffect`, so blob URLs were never revoked. Every image rotation in the Image and Giphy backgrounds was leaking a blob URL until the tab was closed.
+- **Fullscreen keyboard shortcut.** `useKeyPress` was called inside a conditional in the dashboard overlay, violating the React Rules of Hooks. Replaced with an unconditional call + noop fallback when fullscreen is unsupported.
+- **Settings data loss in Greeting and Message widgets.** Their settings forms used `setData({ field: value })` directly, which replaces the entire data object — silently wiping any other fields. Both now merge correctly via the new `usePluginData` hook.
+- **Crash-resistant plugin networking.** A shared `fetchJson` helper now wraps every plugin API call with `res.ok` and array-shape checks. Plugins (Joke, IP Info, NBA, Weather, Literature Clock, Unsplash) now surface labelled errors through the existing error boundary instead of crashing on unexpected response shapes.
+
+### Changed
+
+- Internal refactor: new `usePluginData(api, defaults)` hook returning a `[data, patch]` tuple replaces 51 sites of `setData({ ...data, field: value })` boilerplate across 22 components.
+- Build: ESLint added with React, React Hooks, and TypeScript rule sets. CI runs lint before tests.
+- Cleanup: orphan `todo/README.md` removed; `App.tsx` default export renamed to match the filename.
+
 ## [2.7.1] - 2026-05-24
 
 ### Changed

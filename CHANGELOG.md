@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.8.2] - 2026-05-24
+
+A dark-mode + crash-resistance release.
+
+### Fixed
+
+- **Giphy background no longer crashes the page on API errors.** Sister fix to the 2.7.0 Unsplash one. When `GIPHY_API_KEY` is missing/invalid (or Giphy returns an empty result), the previous code dereferenced `res.data.images.original.webp` blind and threw `TypeError: can't access property "original", res.data.images is undefined`. Now uses the shared `fetchJson` helper plus explicit shape validation; the background degrades to its error fallback instead.
+
+### Changed
+
+- **Settings sidebar now follows the active theme.** The light/dark class previously lived only on `.Dashboard`, but the Settings panel is a sibling of Dashboard — so the sidebar always rendered with hardcoded light colours, looking incongruous against a dark background. The theme class now mirrors to `<html>`, and the sidebar reads it. Switches live when the user changes background.
+- **Errors and StoreError modals also follow the theme.** Same root cause; same fix as a side-effect of the standardisation below.
+- **Theming standardised via CSS custom properties.** A single set of tokens (`--surface`, `--text-heading`, `--border-subtle`, etc.) is defined at the html root and flipped under `html.theme-dark` (with `prefers-color-scheme` as a first-paint fallback). All sidebar surfaces, controls, borders, modals, and the image-thumbnail background now reference the tokens, so future components get light/dark for free.
+
 ## [2.8.1] - 2026-05-24
 
 A polish + bug-fix release. Three more latent bugs surfaced during a hooks-lint triage and are fixed here.

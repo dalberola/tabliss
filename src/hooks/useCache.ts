@@ -23,6 +23,11 @@ export function useCachedEffect(
       prevExpires.current = expires;
       return effect();
     }
+    // We deliberately spread `deps` and depend on `time` here. The hook
+    // gates execution internally via prevDeps / prevExpires refs, so
+    // including `effect` in the array would re-run the effect on every
+    // parent render. eslint can't statically verify the spread shape.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps, expires, time]);
 }
 
@@ -60,6 +65,10 @@ export function useRotatingCache<T>(
       return cache.cursor;
     }
     return 0;
+    // `setCache` is omitted intentionally — it's a stable setter from the
+    // plugin API and including it would re-derive the cursor on every
+    // parent render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cache, time, timeout]);
 
   // Fetch more when cursor reaches end
@@ -74,6 +83,10 @@ export function useRotatingCache<T>(
         }),
       );
     }
+    // Cursor is the trigger; `cache`, `fetch`, and `setCache` are read
+    // through closures of the latest render but the cursor advance is
+    // what gates the fetch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
 
   // Refresh of deps change
@@ -83,6 +96,10 @@ export function useRotatingCache<T>(
         setCache({ items, cursor: 0, rotated: Date.now(), deps }),
       );
     }
+    // Spread `deps` so we re-fetch when caller deps change; `cache` for
+    // the equality check. `fetch` and `setCache` are reference-stable
+    // from the plugin API.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps, cache]);
 
   return cache ? cache.items[cursor] : undefined;

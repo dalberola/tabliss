@@ -10,7 +10,7 @@ async function getDeveloperExcuse() {
     return {
       quote: body.data,
     };
-  } catch (err) {
+  } catch (_err) {
     return {
       quote: "Unable to get a new developer excuse.",
     };

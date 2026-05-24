@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 
 import { usePluginData } from "../../../hooks";
 import categories from "./categories";

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useDebounce } from "../../hooks";
 
 interface Props
@@ -16,8 +16,14 @@ export const DebounceInput: FC<Props> = ({
   const [newValue, setNewValue] = useState(props.value || "");
   const debouncedValue = useDebounce(newValue, wait);
 
+  // Hold the latest onChange in a ref so the debounce effect only runs
+  // when the debounced value actually changes — not on every parent
+  // render that recreates the onChange callback.
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
   useEffect(() => {
-    onChange(debouncedValue);
+    onChangeRef.current(debouncedValue);
   }, [debouncedValue]);
 
   return (

@@ -18,6 +18,8 @@ let cachedZoneOptions: ZoneOption[] | null = null;
 const TimeZoneInput: React.FC<Props> = ({ timeZone, onChange }) => {
   const [zoneOptions, setZoneOptions] = React.useState(cachedZoneOptions);
 
+  // One-shot population of the module-level cache. Adding `zoneOptions`
+  // to deps would create an infinite re-run once setZoneOptions fires.
   React.useEffect(() => {
     if (zoneOptions !== null) return;
 
@@ -42,6 +44,7 @@ const TimeZoneInput: React.FC<Props> = ({ timeZone, onChange }) => {
         return delta === 0 ? a.name.localeCompare(b.name) : delta;
       });
     setZoneOptions(cachedZoneOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

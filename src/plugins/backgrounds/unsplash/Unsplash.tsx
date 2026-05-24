@@ -19,7 +19,7 @@ const Unsplash: React.FC<Props> = ({
     cache = undefined;
   }
 
-  // Migrate old pause setting
+  // Migrate old pause setting (one-shot on mount).
   React.useEffect(() => {
     if (data.timeout === Number.MAX_SAFE_INTEGER) {
       setData({
@@ -28,6 +28,7 @@ const Unsplash: React.FC<Props> = ({
         timeout: defaultData.timeout,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Get current item from rotating cache
@@ -41,7 +42,9 @@ const Unsplash: React.FC<Props> = ({
     [data.by, data.collections, data.featured, data.search, data.topics],
   );
 
-  // Populate browser cache with the next image
+  // Populate browser cache with the next image. Driven by cache changes;
+  // loader is read through the latest closure (stable enough — its
+  // identity changing wouldn't usefully retrigger the prefetch).
   React.useEffect(() => {
     if (cache && cache.items[cache.cursor + 1]) {
       const next = new Image();
@@ -50,6 +53,7 @@ const Unsplash: React.FC<Props> = ({
       next.onerror = loader.pop;
       loader.push();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cache]);
 
   const url = item ? buildLink(item.src) : null;

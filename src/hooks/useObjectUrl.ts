@@ -18,10 +18,15 @@ export function useObjectUrls(data: Blob[]) {
   const [urls, setUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    setUrls(data.map(URL.createObjectURL));
+    // Capture the URLs we create here so the cleanup revokes the right
+    // batch. Closing over the `urls` state directly would revoke whatever
+    // was in state at the time this effect ran (typically [] on first
+    // render), leaking every subsequent batch.
+    const created = data.map(URL.createObjectURL);
+    setUrls(created);
 
     return () => {
-      urls.map(URL.revokeObjectURL);
+      created.forEach(URL.revokeObjectURL);
       setUrls([]);
     };
   }, [data]);

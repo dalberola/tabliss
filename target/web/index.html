@@ -14,8 +14,13 @@
     <link rel="icon" href="/icons/128.png" sizes="128x128" type="image/png" />
     <link rel="icon" href="/icons/32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/icons/128.png" />
-    <title> </title>
-    <script src="theme.js"></script>
+    <title>Tabliss</title>
+    <script>
+      // Apply the saved theme class synchronously before any paint so the
+      // initial render uses the right colours instead of flashing the default.
+      var theme = localStorage.getItem("theme");
+      if (theme) document.documentElement.classList.add("theme-" + theme);
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

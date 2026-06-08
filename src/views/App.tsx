@@ -46,23 +46,26 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const subscriptions = Promise.all([
-      // Config database
+      // Config database. Resolves to { ok, unsubscribe } so a failed open
+      // can block the dashboard instead of silently rendering defaults.
       dbStorage
-        .then((errors) =>
-          Stream.subscribe(
+        .then((errors) => ({
+          ok: true,
+          unsubscribe: Stream.subscribe(
             errors,
             handleError(
               "Cannot save your settings. You may have hit the maximum storage capacity.",
               true,
             ),
           ),
-        )
-        .catch(
+        }))
+        .catch((error) => {
           handleError(
             "Cannot open settings storage. Your settings cannot be loaded or saved.",
             true,
-          ),
-        ),
+          )(error);
+          return { ok: false, unsubscribe: undefined };
+        }),
       // Cache database
       cacheStorage
         .then((errors) =>
@@ -82,16 +85,21 @@ const App: React.FC = () => {
         ),
     ]);
 
-    // Storage is ready
-    subscriptions.then(() => {
-      setReady(true);
-      migrate();
+    // Only reveal the dashboard once the config store has opened. If it
+    // failed, the StoreError modal is shown instead — rendering defaults
+    // would be indistinguishable from data loss and would let the user
+    // reconfigure into a store that cannot save.
+    subscriptions.then(([db]) => {
+      if (db.ok) {
+        setReady(true);
+        migrate();
+      }
     });
 
     return () => {
       // Remove error subscriptions
-      subscriptions.then(([dbSub, cacheSub]) => {
-        if (dbSub) dbSub();
+      subscriptions.then(([db, cacheSub]) => {
+        if (db.unsubscribe) db.unsubscribe();
         if (cacheSub) cacheSub();
       });
     };

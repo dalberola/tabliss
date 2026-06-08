@@ -43,6 +43,9 @@ jobs:
 
       - name: Build web target
         run: npm run build:web
+        env:
+          GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
+          UNSPLASH_API_KEY: ${{ secrets.UNSPLASH_API_KEY }}
 
       - name: Resolve + sanity-check deploy target
         id: target

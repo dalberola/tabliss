@@ -65,17 +65,39 @@ export function requestLocation(): Promise<Coordinates> {
   );
 }
 
-/** Perform geocoding lookup on query string */
-export async function geocodeLocation(query: string): Promise<Coordinates> {
-  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${query}&count=1`;
+export type LocationResult = {
+  name: string;
+  admin1?: string;
+  country: string;
+  countryCode: string;
+  latitude: number;
+  longitude: number;
+};
+
+/** Search for cities/locations by name, returning up to 5 results */
+export async function searchLocations(
+  query: string,
+): Promise<LocationResult[]> {
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5`;
   const data = await fetchJson<{
-    results: { latitude: number; longitude: number }[];
+    results?: {
+      name: string;
+      admin1?: string;
+      country: string;
+      country_code: string;
+      latitude: number;
+      longitude: number;
+    }[];
   }>(url);
 
-  return {
-    latitude: round(data.results[0].latitude),
-    longitude: round(data.results[0].longitude),
-  };
+  return (data.results ?? []).map((r) => ({
+    name: r.name,
+    admin1: r.admin1,
+    country: r.country,
+    countryCode: r.country_code,
+    latitude: round(r.latitude),
+    longitude: round(r.longitude),
+  }));
 }
 
 function round(x: number, precision = 4): number {

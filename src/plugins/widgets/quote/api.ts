@@ -3,18 +3,10 @@ import { Quote } from "./types";
 
 // Get developer excuse
 async function getDeveloperExcuse() {
-  try {
-    const res = await fetch("https://api.tabliss.io/v1/developer-excuses");
-    const body = await res.json();
-
-    return {
-      quote: body.data,
-    };
-  } catch (_err) {
-    return {
-      quote: "Unable to get a new developer excuse.",
-    };
-  }
+  const res = await fetch("https://api.tabliss.io/v1/developer-excuses");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const body = await res.json();
+  return { quote: body.data as string };
 }
 
 // Get quote of the day
@@ -86,22 +78,24 @@ export async function getQuote(
 ): Promise<Quote> {
   loader.push();
 
-  const data =
-    category === "developerexcuses"
-      ? await getDeveloperExcuse()
-      : category === "bible"
-        ? await getBibleVerse()
-        : await getQuoteOfTheDay(category);
+  try {
+    const data =
+      category === "developerexcuses"
+        ? await getDeveloperExcuse()
+        : category === "bible"
+          ? await getBibleVerse()
+          : await getQuoteOfTheDay(category);
 
-  loader.pop();
+    const quote = cleanQuote(data.quote);
 
-  const quote = cleanQuote(data.quote);
-
-  return {
-    ...data,
-    quote,
-    timestamp: Date.now(),
-  };
+    return {
+      ...data,
+      quote,
+      timestamp: Date.now(),
+    };
+  } finally {
+    loader.pop();
+  }
 }
 
 function cleanQuote(quote: string) {

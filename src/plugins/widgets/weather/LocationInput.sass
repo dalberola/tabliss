@@ -7,3 +7,27 @@
 
         label
             margin-bottom: 0
+
+.GeocodeInput
+    position: relative
+    width: 100%
+
+    &__results
+        background-color: var(--surface-raised)
+        border: 1px solid var(--border-subtle)
+        border-radius: 0.2em
+        box-shadow: var(--shadow-elevated)
+        list-style: none
+        margin: 0
+        padding: 0
+        position: absolute
+        width: 100%
+        z-index: 10
+
+        li
+            color: var(--text-primary)
+            cursor: pointer
+            padding: 0.5em 0.75em
+
+            &:hover
+                background-color: var(--surface-control)

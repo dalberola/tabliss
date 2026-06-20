@@ -26,7 +26,7 @@ function formatDiff(diff: number): string {
 const Ring: FC<{ diff: number; total: number }> = ({ diff, total }) => {
   const ratio = total > 0 ? Math.max(0, Math.min(1, diff / total)) : 0;
   const fill = ratio * 100;
-  const color = ratio > 2 / 3 ? "#2ecc71" : ratio > 1 / 3 ? "#e67e22" : "#e74c3c";
+  const color = ratio > 2 / 3 ? "var(--color-success)" : ratio > 1 / 3 ? "var(--color-warning)" : "var(--color-danger)";
 
   return (
     <svg className="Countdown__ring" viewBox="0 0 36 36" aria-hidden="true">
@@ -34,7 +34,7 @@ const Ring: FC<{ diff: number; total: number }> = ({ diff, total }) => {
       <circle
         cx="18" cy="18" r="15.9155"
         fill="none"
-        stroke={color}
+        style={{ stroke: color }}
         strokeWidth="3.5"
         strokeDasharray={`${fill} 100`}
         strokeLinecap="round"

@@ -7,6 +7,7 @@ import TimeZoneInput from "../shared/timeZone/TimeZoneInput";
 const System: React.FC = () => {
   const [locale, setLocale] = useKey(db, "locale");
   const [timeZone, setTimeZone] = useKey(db, "timeZone");
+  const [sidebarOpacity, setSidebarOpacity] = useKey(db, "sidebarOpacity");
 
   return (
     <div>
@@ -183,6 +184,29 @@ const System: React.FC = () => {
       >
         Time Zone
         <TimeZoneInput timeZone={timeZone} onChange={setTimeZone} />
+      </label>
+
+      <label style={{ display: "block", margin: "0.75rem 0 0" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "0.1rem",
+          }}
+        >
+          <span>Opacity</span>
+          <span style={{ opacity: 0.6, fontSize: "0.9em" }}>
+            {Math.round((sidebarOpacity ?? 0.92) * 100)}%
+          </span>
+        </div>
+        <input
+          type="range"
+          min={0.4}
+          max={1}
+          step={0.05}
+          value={sidebarOpacity ?? 0.92}
+          onChange={(e) => setSidebarOpacity(parseFloat(e.target.value))}
+        />
       </label>
     </div>
   );

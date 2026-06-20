@@ -17,6 +17,8 @@ export interface State {
   locale: string;
   /** Time zone selected, if any */
   timeZone: string | null;
+  /** Sidebar background opacity (0–1) */
+  sidebarOpacity: number;
 }
 
 export interface BackgroundState {
@@ -79,6 +81,7 @@ const initData: State = {
   focus: false,
   locale: defaultLocale,
   timeZone: null,
+  sidebarOpacity: 0.92,
 };
 
 // Database storage

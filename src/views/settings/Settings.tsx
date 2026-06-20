@@ -2,7 +2,9 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import { UiContext } from "../../contexts/ui";
 import { exportStore, importStore, resetStore } from "../../db/action";
+import { db } from "../../db/state";
 import { useKeyPress } from "../../hooks";
+import { useKey } from "../../lib/db/react";
 import { Icon } from "../shared";
 import Logo from "../shared/Logo";
 import Background from "./Background";
@@ -13,6 +15,7 @@ import Widgets from "./Widgets";
 
 const Settings: React.FC = () => {
   const { toggleSettings } = React.useContext(UiContext);
+  const [sidebarOpacity] = useKey(db, "sidebarOpacity");
 
   const handleReset = () => {
     if (
@@ -75,7 +78,10 @@ const Settings: React.FC = () => {
     <div className="Settings">
       <a onClick={toggleSettings} className="fullscreen" />
 
-      <div className="plane">
+      <div
+        className="plane"
+        style={{ "--sidebar-opacity": sidebarOpacity ?? 0.92 } as React.CSSProperties}
+      >
         <Logo />
 
         <Background />

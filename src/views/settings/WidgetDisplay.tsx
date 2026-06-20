@@ -1,7 +1,5 @@
 import React from "react";
 import { WidgetDisplay as WidgetDisplayType } from "../../db/state";
-import PositionInput from "./PositionInput";
-import "./WidgetDisplay.css";
 
 type Props = {
   display: WidgetDisplayType;
@@ -11,11 +9,6 @@ type Props = {
 const WidgetDisplay: React.FC<Props> = ({ display, onChange }) => {
   return (
     <div className="WidgetDisplay">
-      <PositionInput
-        value={display.position}
-        onChange={(position) => onChange({ position })}
-      />
-
       <label>
         Size
         <br />

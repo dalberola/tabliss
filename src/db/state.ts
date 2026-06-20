@@ -45,16 +45,10 @@ export interface WidgetDisplay {
   position: WidgetPosition;
 }
 
-export type WidgetPosition =
-  | "topLeft"
-  | "topCentre"
-  | "topRight"
-  | "middleLeft"
-  | "middleCentre"
-  | "middleRight"
-  | "bottomLeft"
-  | "bottomCentre"
-  | "bottomRight";
+export interface WidgetPosition {
+  x: number; // 0–100, percentage of viewport width
+  y: number; // 0–100, percentage of viewport height
+}
 
 // Init data for the store
 const initData: State = {
@@ -71,7 +65,7 @@ const initData: State = {
     key: "widget/time",
     order: 0,
     display: {
-      position: "middleCentre",
+      position: { x: 50, y: 50 },
     },
   },
   "widget/default-greeting": {
@@ -79,7 +73,7 @@ const initData: State = {
     key: "widget/greeting",
     order: 1,
     display: {
-      position: "middleCentre",
+      position: { x: 50, y: 58 },
     },
   },
   focus: false,

@@ -1,7 +1,8 @@
 import { State } from "../state";
 import { Version2Config } from "./migrate1";
 
-export default function (input: Version2Config): Partial<State> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function (input: Version2Config): any {
   return {
     background: input.backgrounds.find((background) => background.active),
     ...Object.fromEntries(

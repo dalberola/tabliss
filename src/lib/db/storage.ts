@@ -141,7 +141,7 @@ export const extension = async (
 
 const batch = (
   flush: (batch: Iterable<DB.Change>) => void,
-  timeout = 0,
+  timeout = 100,
 ): DB.Listener => {
   const changes = new Map();
   let timer: number | null = null;

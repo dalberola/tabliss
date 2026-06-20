@@ -4,5 +4,5 @@
 }
 
 .Logo svg {
-  fill: #3498db;
+  fill: var(--accent-primary);
 }

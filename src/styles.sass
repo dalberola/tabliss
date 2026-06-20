@@ -14,7 +14,11 @@
 // luminosity) so widget text contrasts the background image — see
 // src/views/dashboard/Dashboard.{tsx,sass}.
 
+// SASS variable so color.adjust() calls in component files can reference it
+$accent-primary: #3498db
+
 html
+    --accent-primary: #{$accent-primary}
     --surface: white
     --surface-rgb: 255, 255, 255
     --surface-raised: #ecf0f1
@@ -73,7 +77,7 @@ html
         background-color: black
 
 a
-    color: #3498db
+    color: var(--accent-primary)
     cursor: pointer
     text-decoration: none
 

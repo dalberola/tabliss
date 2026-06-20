@@ -1,4 +1,5 @@
 @use "sass:color"
+@use "../../styles" as tokens
 
 // All colour values reference the tokens defined in src/styles.sass so
 // the sidebar themes automatically with `html.theme-dark` / the
@@ -9,7 +10,7 @@
         margin: 2rem 0
 
         svg
-            fill: #3498db
+            fill: var(--accent-primary)
             width: 100%
 
     h2, h3, h4
@@ -101,7 +102,7 @@
             width: 16px
             height: 16px
             border-radius: 50%
-            background: #3498db
+            background: var(--accent-primary)
             cursor: pointer
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35)
 
@@ -109,7 +110,7 @@
             width: 16px
             height: 16px
             border-radius: 50%
-            background: #3498db
+            background: var(--accent-primary)
             cursor: pointer
             border: none
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35)
@@ -130,11 +131,11 @@
             cursor: default
 
         &--primary
-            background-color: #3498db
+            background-color: var(--accent-primary)
             &:hover
-                background: color.adjust(#3498db, $lightness: -10%)
+                background: color.adjust(tokens.$accent-primary, $lightness: -10%)
             &:active
-                background: color.adjust(#3498db, $lightness: -20%)
+                background: color.adjust(tokens.$accent-primary, $lightness: -20%)
 
         &--secondary
             background: color.adjust(#bdc3c7, $lightness: -20%)
@@ -164,12 +165,12 @@
         background-color: var(--button-icon-bg-hover) !important
 
     &.button--primary
-        background-color: #3498db !important
+        background-color: var(--accent-primary) !important
         color: white
         padding: 0.5em
 
         &:hover
-            background-color: color.adjust(#3498db, $lightness: -20%) !important
+            background-color: color.adjust(tokens.$accent-primary, $lightness: -20%) !important
 
 @media (prefers-color-scheme: light)
     .Settings .Widget

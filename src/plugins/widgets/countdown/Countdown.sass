@@ -1,0 +1,88 @@
+// inline-flex so the parent text-align:center can center the whole widget
+.Countdown
+    display: inline-flex
+    flex-direction: column
+
+    &:hover .Countdown__add
+        opacity: 0.6
+
+// Dashboard: each entry is a flex row — ring left, text right
+.Countdown__entry
+    display: flex
+    align-items: center
+    gap: 0.75em
+    margin-bottom: 0.5em
+
+    &:last-child
+        margin-bottom: 0
+
+.Countdown__text
+    text-align: left
+
+    h1
+        font-size: 1.33em
+
+    h2
+        font-size: 0.67em
+
+.Countdown__ring
+    width: 0.8em
+    height: 0.8em
+    flex-shrink: 0
+
+// Add button row — hidden until the whole widget is hovered
+.Countdown__add
+    cursor: pointer
+    opacity: 0
+    transition: opacity 0.2s
+    user-select: none
+
+    &:hover
+        opacity: 1 !important
+
+    span
+        font-size: 1.5em
+
+// Settings: each event block
+.Countdown__item
+    border-bottom: 1px solid var(--border-faint)
+    padding-bottom: 1rem
+    margin-bottom: 0.5rem
+
+    &:last-of-type
+        border-bottom: none
+
+.Countdown__item-header
+    display: flex
+    align-items: center
+    gap: 0.5em
+    margin: 0.5em 0
+
+    input[type=text]
+        flex: 1
+        margin: 0 !important
+
+// Time row: HH : MM number inputs (24h, explicit)
+.Countdown__time
+    display: flex
+    align-items: center
+    gap: 0.35em
+    margin: 0.5em 0
+
+    input[type=number]
+        width: 3.5em
+        text-align: center
+        -moz-appearance: textfield
+
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button
+            -webkit-appearance: none
+            margin: 0
+
+        &:disabled
+            opacity: 0.4
+
+    span
+        color: var(--border-subtle)
+        flex-shrink: 0
+        user-select: none

@@ -50,8 +50,8 @@
     "@types/webextension-polyfill": "^0.12.5",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^14.0.0",
-    "css-loader": "^6.11.0",
-    "dotenv": "^16.6.1",
+    "css-loader": "^7.1.4",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -67,7 +67,7 @@
     "typescript-eslint": "^8.62.0",
     "typescript-react-intl": "^0.4.1",
     "webpack": "^5.107.1",
-    "webpack-cli": "^5.1.4",
+    "webpack-cli": "^7.0.3",
     "webpack-dev-server": "^5.2.4",
     "workbox-webpack-plugin": "^7.4.1"
   }

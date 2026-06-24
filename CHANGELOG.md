@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+A dependency-maintenance pass: bumps applied in risk-ordered waves, each
+verified against build, tests, and lint before moving on.
+
+### Changed
+
+- **Dependencies updated.** Safe minor/patch bumps (prettier, nanoid, ts-loader,
+  typescript-eslint, webextension-polyfill); build-tooling majors (css-loader
+  6→7, dotenv 16→17, webpack-cli 5→7); and code-affecting majors with their
+  migrations:
+  - `date-fns` 2→4 and `date-fns-tz` 1→3 — renamed `utcToZonedTime`→`toZonedTime`
+    and `zonedTimeToUtc`→`fromZonedTime` across the time context and NBA/time/work
+    widgets.
+  - `@sentry/browser` 7→10 — the removed `autoSessionTracking` option is replaced
+    by filtering out the default `BrowserSession` integration, preserving the
+    original "no session tracking" intent.
+  - `react-error-boundary` 4→6 — `onError` now receives `unknown`; the error is
+    coerced to an `Error` before being captured.
+- **Lint cleaned to zero warnings.** Removed an unused import and a dead
+  `eslint-disable` directive in `src/db/migrations/migrate2.ts`.
+
+### Security
+
+- **`uuid` advisory (GHSA-w5hq-g745-h8pq) patched** via an `overrides` entry that
+  forces `sockjs` (pulled in by `webpack-dev-server`) onto `uuid` ^11.1.1.
+
+### Held
+
+- **TypeScript 6 and ESLint 10** were evaluated and deferred. TS 6 forces the
+  tsconfig off the deprecated `moduleResolution: node10` in a way that conflicts
+  with the CommonJS test-emit pipeline, and sits at the edge of
+  `typescript-eslint`'s supported range. ESLint 10 has no `eslint-plugin-react`
+  release supporting it (peer caps at `^9.7`). Both remain on their current
+  fully-supported majors. See `/upgrade-deps` for the full rationale.
+
 ## [2.8.2] - 2026-05-24
 
 A dark-mode + crash-resistance release.

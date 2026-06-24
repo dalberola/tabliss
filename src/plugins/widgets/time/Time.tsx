@@ -6,7 +6,7 @@ import Analogue from "./Analogue";
 import Digital from "./Digital";
 import { Props, defaultData } from "./types";
 import "./Time.sass";
-import { utcToZonedTime } from "date-fns-tz";
+import { toZonedTime } from "date-fns-tz";
 
 const Time: FC<Props> = ({ data = defaultData }) => {
   const {
@@ -22,7 +22,7 @@ const Time: FC<Props> = ({ data = defaultData }) => {
   let time = useTime(timeZone ? "absolute" : "zoned");
 
   if (timeZone) {
-    time = utcToZonedTime(time, timeZone);
+    time = toZonedTime(time, timeZone);
   }
 
   return (

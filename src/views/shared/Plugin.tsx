@@ -24,5 +24,7 @@ const Plugin: React.FC<Props> = ({ id, component: Component }) => {
 
 export default withErrorBoundary(Plugin, {
   FallbackComponent: Crashed,
-  onError: captureException,
+  // react-error-boundary v6 widened `onError`'s first arg to `unknown`.
+  onError: (error) =>
+    captureException(error instanceof Error ? error : new Error(String(error))),
 });

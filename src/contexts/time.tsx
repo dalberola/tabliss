@@ -1,4 +1,4 @@
-import { utcToZonedTime } from "date-fns-tz";
+import { toZonedTime } from "date-fns-tz";
 import React from "react";
 import { db } from "../db/state";
 import { useValue } from "../lib/db/react";
@@ -10,7 +10,7 @@ type Time = {
 
 function getTime(timeZone: string | null = null): Time {
   const absolute = new Date();
-  const zoned = timeZone ? utcToZonedTime(absolute, timeZone) : absolute;
+  const zoned = timeZone ? toZonedTime(absolute, timeZone) : absolute;
 
   return { absolute, zoned };
 }

@@ -2,10 +2,13 @@ import { init, captureException, setTag } from "@sentry/browser";
 
 export function register(): void {
   init({
-    autoSessionTracking: false, // Wtf sentry
     dsn: "https://2e0e75c7477c4c3e9572ee97241e569c@o113629.ingest.sentry.io/250221",
     enabled: !DEV,
     release: VERSION,
+    // Sentry v8+ removed `autoSessionTracking`; disable session tracking by
+    // dropping the default BrowserSession integration instead.
+    integrations: (defaults) =>
+      defaults.filter((integration) => integration.name !== "BrowserSession"),
   });
   setTag("target", BUILD_TARGET);
 }

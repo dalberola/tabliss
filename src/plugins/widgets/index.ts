@@ -16,6 +16,7 @@ import todo from "./todo";
 import weather from "./weather";
 import workHours from "./workHours";
 import joke from "./joke";
+import auth from "./auth";
 
 export const widgetConfigs = [
   countdown,
@@ -39,6 +40,9 @@ export const widgetConfigs = [
 
 if (BUILD_TARGET === "web") {
   widgetConfigs.push(js);
+  // Account sync relies on cross-subdomain cookies + the service CORS allowlist,
+  // which only hold for the web build at diginaut.es (not the extensions).
+  widgetConfigs.push(auth);
 }
 
 widgetConfigs.sort((a, b) => a.name.localeCompare(b.name));

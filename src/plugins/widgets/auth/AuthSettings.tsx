@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { useAuth } from "../../../contexts/auth";
+import "./AuthSettings.sass";
 
 const AuthSettings: FC = () => {
   const { status, email, error, lastSyncedAt, login, register, logout } =
@@ -33,7 +34,11 @@ const AuthSettings: FC = () => {
           </p>
         ) : null}
         {error ? <p role="alert">{error}</p> : null}
-        <button type="button" onClick={() => void logout()}>
+        <button
+          type="button"
+          className="button button--primary button--block"
+          onClick={() => void logout()}
+        >
           Log out
         </button>
       </div>
@@ -68,18 +73,22 @@ const AuthSettings: FC = () => {
         <small>Sign in to save your dashboard and sync it across devices.</small>
       </p>
 
-      <div role="tablist">
+      <div className="auth-tabs" role="tablist">
         <button
           type="button"
+          className={`button ${
+            mode === "login" ? "button--primary" : "button--secondary"
+          }`}
           onClick={() => setMode("login")}
-          disabled={mode === "login"}
         >
           Log in
         </button>
         <button
           type="button"
+          className={`button ${
+            mode === "register" ? "button--primary" : "button--secondary"
+          }`}
           onClick={() => setMode("register")}
-          disabled={mode === "register"}
         >
           Create account
         </button>
@@ -135,6 +144,7 @@ const AuthSettings: FC = () => {
 
         <button
           type="submit"
+          className="button button--primary button--block"
           disabled={busy || (mode === "register" && !accepted)}
         >
           {busy ? "…" : mode === "register" ? "Create account" : "Log in"}

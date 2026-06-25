@@ -24,8 +24,6 @@
       h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
       h2 { font-size: 1.2rem; margin-top: 2rem; }
       .meta { color: #888; font-size: 0.9rem; margin-bottom: 1.5rem; }
-      .placeholder { background: #ffe9a8; color: #5a4500; padding: 0 0.25rem; border-radius: 3px; }
-      @media (prefers-color-scheme: dark) { .placeholder { background: #5a4500; color: #ffe9a8; } }
       footer { margin-top: 3rem; font-size: 0.9rem; color: #888; }
       table { border-collapse: collapse; width: 100%; margin: 0.5rem 0; }
       th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #8884; vertical-align: top; }
@@ -36,11 +34,13 @@
     <p class="meta">Service: Tabliss at <a href="https://diginaut.es/">diginaut.es</a> · Version 2026-06-25 · Last updated 25 June 2026</p>
 
     <p>
-      This policy explains what personal data
-      <span class="placeholder">[OPERATOR / DATA CONTROLLER LEGAL NAME]</span>
-      ("we") processes when you use the Tabliss web app at
+      This policy explains what personal data <strong>Stackly</strong>
+      (<a href="https://stackly.ch/">stackly.ch</a>), Geneva, Switzerland ("we")
+      processes when you use the Tabliss web app at
       <a href="https://diginaut.es/">diginaut.es</a> and the optional account/sync
-      service at <a href="https://auth.diginaut.es/">auth.diginaut.es</a>.
+      service at <a href="https://auth.diginaut.es/">auth.diginaut.es</a>. We
+      process personal data under Swiss data-protection law (nFADP) and, where
+      applicable, the EU GDPR.
     </p>
 
     <h2>Using Tabliss without an account</h2>
@@ -54,11 +54,11 @@
     <h2>Account &amp; preference sync (optional)</h2>
     <p>If you create an account to sync your preferences, we process:</p>
     <table>
-      <tr><th>Data</th><th>Purpose</th><th>Legal basis (GDPR)</th></tr>
-      <tr><td>Email address</td><td>Account identity, email verification, password reset</td><td>Contract (Art. 6(1)(b))</td></tr>
-      <tr><td>Password (stored only as a salted <em>argon2</em> hash — never in plain text)</td><td>Authentication</td><td>Contract (Art. 6(1)(b))</td></tr>
-      <tr><td>Your Tabliss configuration (widget layout, options, theme, language, background <em>references/URLs</em> — <strong>not</strong> uploaded image files)</td><td>Sync your settings across devices</td><td>Contract (Art. 6(1)(b))</td></tr>
-      <tr><td>Consent record (which Terms/Privacy version you accepted, and when)</td><td>Proof of consent</td><td>Legal obligation / consent</td></tr>
+      <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+      <tr><td>Email address</td><td>Account identity, email verification, password reset</td><td>Contract</td></tr>
+      <tr><td>Password (stored only as a salted <em>argon2</em> hash — never in plain text)</td><td>Authentication</td><td>Contract</td></tr>
+      <tr><td>Your Tabliss configuration (widget layout, options, theme, language, background <em>references/URLs</em> — <strong>not</strong> uploaded image files)</td><td>Sync your settings across devices</td><td>Contract</td></tr>
+      <tr><td>Consent record (which Terms/Privacy version you accepted, and when)</td><td>Proof of consent</td><td>Legal obligation</td></tr>
     </table>
     <p>
       Uploaded background images stay in your browser and are <strong>never</strong>
@@ -70,16 +70,16 @@
       When logged in, the account service sets one <strong>strictly necessary</strong>
       cookie — a <code>refresh_token</code> (HttpOnly, Secure, scoped to
       <code>/auth</code>) that keeps your session active. It is not used for
-      tracking or advertising. No consent banner is required for it.
+      tracking or advertising.
     </p>
 
     <h2>Analytics &amp; error reporting (third parties)</h2>
     <p>The Tabliss web app loads the following third-party services:</p>
     <ul>
       <li>
-        <strong>Matomo Tag Manager</strong> (loaded from <code>go.stackly.ch</code>) —
-        usage analytics.
-        <span class="placeholder">[CONFIRM: is Matomo configured for IP anonymisation / cookieless? Is consent required in your configuration? Adjust this section accordingly.]</span>
+        <strong>Matomo</strong> (self-hosted analytics, loaded from
+        <code>go.stackly.ch</code>) — configured with <strong>IP
+        anonymisation</strong> to measure aggregate usage.
       </li>
       <li>
         <strong>Sentry</strong> (<code>sentry.io</code>) — collects crash and error
@@ -97,20 +97,23 @@
 
     <h2>Data retention</h2>
     <p>
-      Account data is kept while your account exists. Email-verification and
-      password-reset tokens are short-lived and automatically deleted after they
-      expire. If you delete your account, your account data and synced preferences
-      are removed.
-      <span class="placeholder">[CONFIRM retention specifics and backup retention period.]</span>
+      We keep your account data while your account is active. You can
+      <strong>delete your account at any time</strong> from the Account Sync widget
+      ("Delete account"), which removes your account and synced settings. We also
+      <strong>automatically delete accounts after 12 months of inactivity</strong>
+      (no sign-in or sync); before deletion we email a reminder so you can keep the
+      account by signing in. Email-verification and password-reset tokens are
+      short-lived and deleted automatically when they expire.
     </p>
 
     <h2>Your rights</h2>
     <p>
-      Under the GDPR you may request access, rectification, erasure, restriction,
-      portability, and object to processing of your personal data. To exercise these
-      rights, contact us at
-      <span class="placeholder">[CONTACT EMAIL — e.g. hello@diginaut.es]</span>.
-      You also have the right to lodge a complaint with your data protection
+      Under Swiss data-protection law (nFADP) and, where applicable, the GDPR, you
+      may request access, rectification, erasure, restriction, and portability of
+      your personal data, and object to processing. To exercise these rights,
+      contact us at <a href="mailto:hello@diginaut.es">hello@diginaut.es</a>. You
+      may also lodge a complaint with the Swiss Federal Data Protection and
+      Information Commissioner (FDPIC) or, in the EU, your local supervisory
       authority.
     </p>
 
@@ -122,7 +125,8 @@
 
     <h2>Contact</h2>
     <p>
-      <span class="placeholder">[OPERATOR LEGAL NAME, postal address, and contact email]</span>
+      Stackly (<a href="https://stackly.ch/">stackly.ch</a>), Geneva, Switzerland —
+      <a href="mailto:hello@diginaut.es">hello@diginaut.es</a>
     </p>
 
     <footer>

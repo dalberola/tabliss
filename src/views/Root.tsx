@@ -1,4 +1,5 @@
 import React from "react";
+import AuthProvider from "../contexts/auth";
 import ErrorProvider from "../contexts/error";
 import TimeProvider from "../contexts/time";
 import UiProvider from "../contexts/ui";
@@ -11,7 +12,9 @@ const Root: React.FC = () => (
       <UiProvider>
         <IntlProvider>
           <TimeProvider>
-            <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </TimeProvider>
         </IntlProvider>
       </UiProvider>

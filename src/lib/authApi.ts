@@ -62,10 +62,18 @@ export const authApi = {
     password: string,
     acceptedTerms: true,
     consentVersion: string,
+    captchaToken?: string,
   ): Promise<{ message: string }> =>
     request("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, acceptedTerms, consentVersion }),
+      body: JSON.stringify({
+        email,
+        password,
+        acceptedTerms,
+        consentVersion,
+        // Omitted entirely when reCAPTCHA is not configured client-side.
+        ...(captchaToken ? { captchaToken } : {}),
+      }),
     }),
 
   login: (email: string, password: string): Promise<{ accessToken: string }> =>

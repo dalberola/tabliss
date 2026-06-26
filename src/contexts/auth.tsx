@@ -4,6 +4,7 @@ import { exportStore, importStore } from "../db/action";
 import { db, dbStorage } from "../db/state";
 import { DB } from "../lib";
 import { authApi, AuthError } from "../lib/authApi";
+import { executeRecaptcha } from "../lib/recaptcha";
 
 /**
  * Version of the Terms/Privacy pages presented to the user. Must match the
@@ -156,11 +157,14 @@ const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const register = React.useCallback(
     async (mail: string, password: string) => {
       setError(null);
+      // No-op (undefined) unless a reCAPTCHA site key is configured at build time.
+      const captchaToken = await executeRecaptcha("register");
       await authApi.register(
         mail.trim().toLowerCase(),
         password,
         true,
         CONSENT_VERSION,
+        captchaToken,
       );
     },
     [],

@@ -83,6 +83,9 @@ const config = {
       GIPHY_API_KEY: JSON.stringify(process.env.GIPHY_API_KEY),
       VERSION: JSON.stringify(version),
       UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY),
+      // Public reCAPTCHA v3 site key. Empty/unset disables the client check (no
+      // token sent) — keep it in lockstep with the auth service's RECAPTCHA_SECRET.
+      RECAPTCHA_SITE_KEY: JSON.stringify(process.env.RECAPTCHA_SITE_KEY),
     }),
   ],
   devtool: isWeb || !isProduction ? "source-map" : false,

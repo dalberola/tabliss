@@ -152,4 +152,185 @@ export const messages = defineMessages({
   dayThursday: { id: "widget.day.thursday", defaultMessage: "Thursday" },
   dayFriday: { id: "widget.day.friday", defaultMessage: "Friday" },
   daySaturday: { id: "widget.day.saturday", defaultMessage: "Saturday" },
+
+  // Search
+  searchProvider: {
+    id: "widget.search.provider",
+    defaultMessage: "Search Provider",
+  },
+  searchSuggestionsProvider: {
+    id: "widget.search.suggestionsProvider",
+    defaultMessage: "Suggestions Provider",
+  },
+  searchOff: { id: "widget.search.off", defaultMessage: "Off" },
+  searchSuggestionQuantity: {
+    id: "widget.search.suggestionQuantity",
+    defaultMessage: "Suggestion Quantity",
+  },
+
+  // GitHub
+  githubUsername: {
+    id: "widget.github.username",
+    defaultMessage: "GitHub Username",
+  },
+
+  // Links
+  linksColumns: {
+    id: "widget.links.columns",
+    defaultMessage: "Number of columns",
+  },
+  linksAlwaysVisible: {
+    id: "widget.links.alwaysVisible",
+    defaultMessage: "Links are always visible",
+  },
+  linksNewTab: {
+    id: "widget.links.newTab",
+    defaultMessage: "Links open in a new tab",
+  },
+  linksAdd: { id: "widget.links.add", defaultMessage: "Add link" },
+  linkRemove: { id: "widget.links.remove", defaultMessage: "Remove link" },
+  linkMoveDown: {
+    id: "widget.links.moveDown",
+    defaultMessage: "Move link down",
+  },
+  linkMoveUp: { id: "widget.links.moveUp", defaultMessage: "Move link up" },
+  linkShortcutN: {
+    id: "widget.links.shortcutN",
+    defaultMessage: "Keyboard shortcut {number}",
+  },
+  linkShortcut: {
+    id: "widget.links.shortcut",
+    defaultMessage: "Shortcut",
+  },
+  linkUrl: { id: "widget.links.url", defaultMessage: "URL" },
+  optional: {
+    id: "widget.optional",
+    defaultMessage: "(optional)",
+    description: "Suffix marking an optional field",
+  },
+  linkIcon: { id: "widget.links.icon", defaultMessage: "Icon" },
+  linkIconNone: { id: "widget.links.iconNone", defaultMessage: "None" },
+  linkIconWebsite: {
+    id: "widget.links.iconWebsite",
+    defaultMessage: "Website Icon",
+  },
+
+  // Weather
+  weatherShowDetails: {
+    id: "widget.weather.showDetails",
+    defaultMessage: "Show extended details",
+  },
+  weatherMetric: {
+    id: "widget.weather.metric",
+    defaultMessage: "Metric units",
+  },
+  weatherImperial: {
+    id: "widget.weather.imperial",
+    defaultMessage: "Imperial units",
+  },
+  weatherAttribution: {
+    id: "widget.weather.attribution",
+    defaultMessage: "Weather data by Open-Meteo.com",
+  },
+  weatherSearchCity: {
+    id: "widget.weather.searchCity",
+    defaultMessage: "Search for city",
+  },
+  weatherCityPlaceholder: {
+    id: "widget.weather.cityPlaceholder",
+    defaultMessage: "City or location",
+  },
+  weatherLatitude: {
+    id: "widget.weather.latitude",
+    defaultMessage: "Latitude",
+  },
+  weatherLongitude: {
+    id: "widget.weather.longitude",
+    defaultMessage: "Longitude",
+  },
+  weatherEnterCoordinates: {
+    id: "widget.weather.enterCoordinates",
+    defaultMessage: "Enter coordinates",
+  },
+  weatherLocateError: {
+    id: "widget.weather.locateError",
+    defaultMessage: "Cannot determine your location: {error}",
+  },
+
+  // Auth
+  authDashboardDisplay: {
+    id: "widget.auth.dashboardDisplay",
+    defaultMessage: "Dashboard display",
+  },
+  authDisplayIcon: { id: "widget.auth.displayIcon", defaultMessage: "Icon" },
+  authDisplayFull: {
+    id: "widget.auth.displayFull",
+    defaultMessage: "Full text",
+  },
+  authDisplayHidden: {
+    id: "widget.auth.displayHidden",
+    defaultMessage: "Hidden",
+  },
+  authDeleteFailed: {
+    id: "widget.auth.deleteFailed",
+    defaultMessage: "Could not delete the account.",
+  },
+  authLoading: { id: "widget.auth.loading", defaultMessage: "Loading…" },
+  authSignedIn: {
+    id: "widget.auth.signedIn",
+    defaultMessage:
+      "Signed in. Your settings sync automatically across devices.",
+  },
+  authSignedInAs: {
+    id: "widget.auth.signedInAs",
+    defaultMessage:
+      "Signed in as {email}. Your settings sync automatically across devices.",
+  },
+  authLastSynced: {
+    id: "widget.auth.lastSynced",
+    defaultMessage: "Last synced {time}",
+  },
+  authLogOut: { id: "widget.auth.logOut", defaultMessage: "Log out" },
+  authDeleteAccount: {
+    id: "widget.auth.deleteAccount",
+    defaultMessage: "Delete account",
+  },
+  authDeleteWarning: {
+    id: "widget.auth.deleteWarning",
+    defaultMessage:
+      "This permanently deletes your account and the settings synced to it. This cannot be undone. Your dashboard stays on this device.",
+  },
+  authCancel: { id: "widget.auth.cancel", defaultMessage: "Cancel" },
+  authConfirmDelete: {
+    id: "widget.auth.confirmDelete",
+    defaultMessage: "Yes, delete",
+  },
+  authVerifyNotice: {
+    id: "widget.auth.verifyNotice",
+    defaultMessage: "Check your email to verify your account, then log in.",
+  },
+  authGenericError: {
+    id: "widget.auth.genericError",
+    defaultMessage: "Something went wrong.",
+  },
+  authIntro: {
+    id: "widget.auth.intro",
+    defaultMessage: "Sign in to save your dashboard and sync it across devices.",
+  },
+  authLogIn: { id: "widget.auth.logIn", defaultMessage: "Log in" },
+  authCreateAccount: {
+    id: "widget.auth.createAccount",
+    defaultMessage: "Create account",
+  },
+  authEmail: { id: "widget.auth.email", defaultMessage: "Email" },
+  authPassword: { id: "widget.auth.password", defaultMessage: "Password" },
+  authAccept: {
+    id: "widget.auth.accept",
+    defaultMessage:
+      "I accept the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>",
+  },
+  authPasswordHint: {
+    id: "widget.auth.passwordHint",
+    defaultMessage: "Password must be at least 12 characters.",
+  },
 });

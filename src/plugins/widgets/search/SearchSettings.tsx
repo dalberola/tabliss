@@ -1,16 +1,19 @@
 import React, { FC } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { engines } from "./engines";
 import { Props, defaultData } from "./types";
 
 const SearchSettings: FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
 
   return (
     <div className="SearchSettings">
       <label>
-        Search Provider
+        <FormattedMessage {...messages.searchProvider} />
         <select
           onChange={(event) => patch({ searchEngine: event.target.value })}
           value={data.searchEngine}
@@ -25,7 +28,7 @@ const SearchSettings: FC<Props> = (api) => {
 
       {BUILD_TARGET === "web" && (
         <label>
-          Suggestions Provider
+          <FormattedMessage {...messages.searchSuggestionsProvider} />
           <select
             onChange={(event) =>
               patch({ suggestionsEngine: event.target.value })
@@ -33,7 +36,7 @@ const SearchSettings: FC<Props> = (api) => {
             value={data.suggestionsEngine}
           >
             <option key="off" value="">
-              Off
+              {intl.formatMessage(messages.searchOff)}
             </option>
             {engines
               .filter(({ suggest_url }) => Boolean(suggest_url))
@@ -48,7 +51,7 @@ const SearchSettings: FC<Props> = (api) => {
 
       {data.suggestionsEngine && (
         <label>
-          Suggestion Quanitity
+          <FormattedMessage {...messages.searchSuggestionQuantity} />
           <input
             type="number"
             min="1"

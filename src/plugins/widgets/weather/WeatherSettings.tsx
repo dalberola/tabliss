@@ -1,10 +1,13 @@
 import React, { FC } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import LocationInput from "./LocationInput";
 import { defaultData, Props } from "./types";
 
 const WeatherSettings: FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
 
   return (
@@ -18,11 +21,11 @@ const WeatherSettings: FC<Props> = (api) => {
       {data.latitude && data.latitude ? (
         <>
           <label>
-            Name
+            <FormattedMessage {...messages.name} />
             <input
               type="text"
               value={data.name || ""}
-              placeholder="Optional name"
+              placeholder={intl.formatMessage(messages.optionalName)}
               onChange={(event) =>
                 patch({ name: event.target.value || undefined })
               }
@@ -37,7 +40,7 @@ const WeatherSettings: FC<Props> = (api) => {
               checked={data.showDetails}
               onChange={() => patch({ showDetails: !data.showDetails })}
             />{" "}
-            Show extended details
+            <FormattedMessage {...messages.weatherShowDetails} />
           </label>
 
           <label>
@@ -46,7 +49,7 @@ const WeatherSettings: FC<Props> = (api) => {
               checked={data.units === "si"}
               onChange={() => patch({ units: "si" })}
             />{" "}
-            Metric units
+            <FormattedMessage {...messages.weatherMetric} />
           </label>
 
           <label>
@@ -55,7 +58,7 @@ const WeatherSettings: FC<Props> = (api) => {
               checked={data.units === "us"}
               onChange={() => patch({ units: "us" })}
             />{" "}
-            Imperial units
+            <FormattedMessage {...messages.weatherImperial} />
           </label>
 
           <p>
@@ -64,7 +67,7 @@ const WeatherSettings: FC<Props> = (api) => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Weather data by Open-Meteo.com
+              <FormattedMessage {...messages.weatherAttribution} />
             </a>
           </p>
         </>

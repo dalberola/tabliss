@@ -4,7 +4,7 @@ import { useAuth } from "../../../contexts/auth";
 import "./AuthSettings.sass";
 
 const AuthSettings: FC = () => {
-  const { status, email, error, lastSyncedAt, login, register, logout } =
+  const { status, email, error, lastSyncedAt, login, register, logout, deleteAccount } =
     useAuth();
 
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -14,6 +14,23 @@ const AuthSettings: FC = () => {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const onDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      // On success the provider flips status to "anon" and this branch unmounts.
+      await deleteAccount();
+    } catch (err) {
+      setDeleteError(
+        err instanceof Error ? err.message : "Could not delete the account.",
+      );
+      setDeleting(false);
+    }
+  };
 
   if (status === "loading") {
     return <div className="AuthSettings">Loading…</div>;
@@ -41,6 +58,47 @@ const AuthSettings: FC = () => {
         >
           Log out
         </button>
+
+        {!confirmingDelete ? (
+          <button
+            type="button"
+            className="button button--secondary button--block"
+            onClick={() => {
+              setDeleteError(null);
+              setConfirmingDelete(true);
+            }}
+          >
+            Delete account
+          </button>
+        ) : (
+          <div className="auth-danger">
+            <p>
+              <small>
+                This permanently deletes your account and the settings synced to
+                it. This cannot be undone. Your dashboard stays on this device.
+              </small>
+            </p>
+            {deleteError ? <p role="alert">{deleteError}</p> : null}
+            <div className="auth-tabs">
+              <button
+                type="button"
+                className="button button--secondary"
+                disabled={deleting}
+                onClick={() => setConfirmingDelete(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="button button--danger"
+                disabled={deleting}
+                onClick={() => void onDelete()}
+              >
+                {deleting ? "…" : "Yes, delete"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

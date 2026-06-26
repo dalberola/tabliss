@@ -79,6 +79,12 @@ export const authApi = {
 
   logout: (): Promise<unknown> => request("/auth/logout", { method: "POST" }),
 
+  deleteAccount: (token: string): Promise<unknown> =>
+    request("/me", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+
   getPreferences: (token: string): Promise<{ preferences: ServerPreferences }> =>
     request("/me/preferences", {
       method: "GET",

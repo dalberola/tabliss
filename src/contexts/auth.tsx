@@ -31,6 +31,8 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   /** Revoke the session and stop syncing. */
   logout: () => Promise<void>;
+  /** Permanently delete the account on the server, then clear the local session. */
+  deleteAccount: () => Promise<void>;
 }
 
 export const AuthContext = React.createContext<AuthContextValue>(null as any);
@@ -173,6 +175,15 @@ const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     exitAuthed();
   }, [exitAuthed]);
 
+  // Permanently delete the account server-side (DELETE /me cascades the user's
+  // tokens and clears the refresh cookie), then drop the local session. The
+  // local dashboard config is untouched — it stays on this device.
+  const deleteAccount = React.useCallback(async () => {
+    setError(null);
+    await withToken((t) => authApi.deleteAccount(t));
+    exitAuthed();
+  }, [withToken, exitAuthed]);
+
   // Boot: silently restore a session via the refresh cookie. We do NOT pull on
   // boot — local is authoritative between logins and auto-push keeps the server
   // in step; a pull only happens on an explicit login.
@@ -206,6 +217,7 @@ const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     register,
     login,
     logout,
+    deleteAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>Privacy Policy — Tabliss (diginaut.es)</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+        color: #1a1a1a;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { color: #e6e6e6; background: #161616; }
+        a { color: #6db3f2; }
+      }
+      h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
+      h2 { font-size: 1.2rem; margin-top: 2rem; }
+      .meta { color: #888; font-size: 0.9rem; margin-bottom: 1.5rem; }
+      footer { margin-top: 3rem; font-size: 0.9rem; color: #888; }
+      table { border-collapse: collapse; width: 100%; margin: 0.5rem 0; }
+      th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #8884; vertical-align: top; }
+    </style>
+  </head>
+  <body>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Service: Tabliss at <a href="https://diginaut.es/">diginaut.es</a> · Version 2026-06-25 · Last updated 25 June 2026</p>
+
+    <p>
+      This policy explains what personal data <strong>Stackly</strong>
+      (<a href="https://stackly.ch/">stackly.ch</a>), Geneva, Switzerland ("we")
+      processes when you use the Tabliss web app at
+      <a href="https://diginaut.es/">diginaut.es</a> and the optional account/sync
+      service at <a href="https://auth.diginaut.es/">auth.diginaut.es</a>. We
+      process personal data under Swiss data-protection law (nFADP) and, where
+      applicable, the EU GDPR.
+    </p>
+
+    <h2>Using Tabliss without an account</h2>
+    <p>
+      Tabliss works fully offline in your browser. Your dashboard configuration
+      (widgets, layout, theme, language, background choices) and any background
+      images you upload are stored <strong>locally in your browser</strong> and are
+      never sent to us unless you choose to create an account and enable sync.
+    </p>
+
+    <h2>Account &amp; preference sync (optional)</h2>
+    <p>If you create an account to sync your preferences, we process:</p>
+    <table>
+      <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+      <tr><td>Email address</td><td>Account identity, email verification, password reset</td><td>Contract</td></tr>
+      <tr><td>Password (stored only as a salted <em>argon2</em> hash — never in plain text)</td><td>Authentication</td><td>Contract</td></tr>
+      <tr><td>Your Tabliss configuration (widget layout, options, theme, language, background <em>references/URLs</em> — <strong>not</strong> uploaded image files)</td><td>Sync your settings across devices</td><td>Contract</td></tr>
+      <tr><td>Consent record (which Terms/Privacy version you accepted, and when)</td><td>Proof of consent</td><td>Legal obligation</td></tr>
+    </table>
+    <p>
+      Uploaded background images stay in your browser and are <strong>never</strong>
+      uploaded to our servers.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      When logged in, the account service sets one <strong>strictly necessary</strong>
+      cookie — a <code>refresh_token</code> (HttpOnly, Secure, scoped to
+      <code>/auth</code>) that keeps your session active. It is not used for
+      tracking or advertising.
+    </p>
+
+    <h2>Analytics &amp; error reporting (third parties)</h2>
+    <p>The Tabliss web app loads the following third-party services:</p>
+    <ul>
+      <li>
+        <strong>Matomo</strong> (self-hosted analytics, loaded from
+        <code>go.stackly.ch</code>) — configured with <strong>IP
+        anonymisation</strong> to measure aggregate usage.
+      </li>
+      <li>
+        <strong>Sentry</strong> (<code>sentry.io</code>) — collects crash and error
+        reports (including technical details such as browser and error context) to
+        help us fix bugs.
+      </li>
+    </ul>
+
+    <h2>Spam protection (Google reCAPTCHA)</h2>
+    <p>
+      When you <strong>create an account</strong>, we use
+      <strong>Google reCAPTCHA v3</strong> to tell real users apart from automated
+      abuse. To do this, your browser loads a script from Google and sends Google
+      technical signals about the request — including your IP address, browser and
+      device information, and interaction data. This happens
+      <strong>only on the registration step</strong>, not on general browsing.
+      Google processes this data as an independent controller under its own
+      <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+      <a href="https://policies.google.com/terms">Terms of Service</a>; your use of
+      reCAPTCHA is also subject to them. We do not use reCAPTCHA for advertising or
+      profiling.
+    </p>
+
+    <h2>Hosting &amp; email processors</h2>
+    <p>
+      The website, account API, database, and verification/password-reset email are
+      hosted and sent by <strong>Infomaniak</strong> (Switzerland), acting as our
+      processor.
+    </p>
+
+    <h2>Data retention</h2>
+    <p>
+      We keep your account data while your account is active. You can
+      <strong>delete your account at any time</strong> from the Account Sync widget
+      ("Delete account"), which removes your account and synced settings. We also
+      <strong>automatically delete accounts after 12 months of inactivity</strong>
+      (no sign-in or sync); before deletion we email a reminder so you can keep the
+      account by signing in. Email-verification and password-reset tokens are
+      short-lived and deleted automatically when they expire.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      Under Swiss data-protection law (nFADP) and, where applicable, the GDPR, you
+      may request access, rectification, erasure, restriction, and portability of
+      your personal data, and object to processing. To exercise these rights,
+      contact us at <a href="mailto:hello@diginaut.es">hello@diginaut.es</a>. You
+      may also lodge a complaint with the Swiss Federal Data Protection and
+      Information Commissioner (FDPIC) or, in the EU, your local supervisory
+      authority.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      We may update this policy; the version date above will change. Material changes
+      affecting account holders may require re-acceptance.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Stackly (<a href="https://stackly.ch/">stackly.ch</a>), Geneva, Switzerland —
+      <a href="mailto:hello@diginaut.es">hello@diginaut.es</a>
+    </p>
+
+    <footer>
+      <p><a href="https://diginaut.es/">← Back to Tabliss</a> · <a href="/terms.html">Terms &amp; Conditions</a></p>
+    </footer>
+  </body>
+</html>

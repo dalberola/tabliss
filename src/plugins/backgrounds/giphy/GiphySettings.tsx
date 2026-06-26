@@ -1,7 +1,9 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
 import { DebounceInput } from "../../shared";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const GiphySettings: FC<Props> = (api) => {
@@ -10,7 +12,7 @@ const GiphySettings: FC<Props> = (api) => {
   return (
     <div className="GiphySettings">
       <label>
-        Tag
+        <FormattedMessage {...messages.giphyTag} />
         <DebounceInput
           type="text"
           value={data.tag}
@@ -18,7 +20,9 @@ const GiphySettings: FC<Props> = (api) => {
           wait={500}
         />
       </label>
-      <p className="info">Separate multiple tags with a comma</p>
+      <p className="info">
+        <FormattedMessage {...messages.giphyTagHint} />
+      </p>
 
       <label>
         <input
@@ -26,7 +30,7 @@ const GiphySettings: FC<Props> = (api) => {
           checked={data.expand}
           onChange={() => patch({ expand: !data.expand })}
         />{" "}
-        Stretch to fill screen
+        <FormattedMessage {...messages.giphyStretch} />
       </label>
 
       <label>
@@ -35,7 +39,7 @@ const GiphySettings: FC<Props> = (api) => {
           checked={!data.nsfw}
           onChange={() => patch({ nsfw: !data.nsfw })}
         />{" "}
-        Safe Search
+        <FormattedMessage {...messages.giphySafeSearch} />
       </label>
     </div>
   );

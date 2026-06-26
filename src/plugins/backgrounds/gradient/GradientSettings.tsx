@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const GradientSettings: FC<Props> = (api) => {
@@ -9,7 +11,7 @@ const GradientSettings: FC<Props> = (api) => {
   return (
     <div className="GradientSettings">
       <label>
-        From Colour
+        <FormattedMessage {...messages.gradientFrom} />
         <input
           type="color"
           value={data.from}
@@ -18,7 +20,7 @@ const GradientSettings: FC<Props> = (api) => {
       </label>
 
       <label>
-        To Colour
+        <FormattedMessage {...messages.gradientTo} />
         <input
           type="color"
           value={data.to}
@@ -27,7 +29,7 @@ const GradientSettings: FC<Props> = (api) => {
       </label>
 
       <label>
-        Angle (0-360)
+        <FormattedMessage {...messages.gradientAngle} />
         <input
           type="number"
           value={data.angle}

@@ -1,34 +1,53 @@
 import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
 import { Icon } from "../../../views/shared";
 import { DebounceInput } from "../../shared";
+import { messages } from "../messages";
 import topics from "./topics.json";
 import { defaultData, Props } from "./types";
 
 const UnsplashSettings: React.FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
 
   return (
     <div className="UnsplashSettings">
       <label>
         <span style={{ float: "right" }}>
-          {data.paused ? <span className="text--grey">(Paused) </span> : null}
+          {data.paused ? (
+            <span className="text--grey">
+              <FormattedMessage {...messages.unsplashPaused} />{" "}
+            </span>
+          ) : null}
           <a onClick={() => patch({ paused: !data.paused })}>
             <Icon name={data.paused ? "play" : "pause"} />
           </a>
         </span>
-        Show a new photo
+        <FormattedMessage {...messages.unsplashShowNewPhoto} />
         <select
           value={data.timeout}
           onChange={(event) => patch({ timeout: Number(event.target.value) })}
         >
-          <option value="0">Every new tab</option>
-          <option value="300">Every 5 minutes</option>
-          <option value="900">Every 15 minutes</option>
-          <option value="3600">Every hour</option>
-          <option value="86400">Every day</option>
-          <option value="604800">Every week</option>
+          <option value="0">
+            {intl.formatMessage(messages.unsplashEveryNewTab)}
+          </option>
+          <option value="300">
+            {intl.formatMessage(messages.unsplashEvery5)}
+          </option>
+          <option value="900">
+            {intl.formatMessage(messages.unsplashEvery15)}
+          </option>
+          <option value="3600">
+            {intl.formatMessage(messages.unsplashEveryHour)}
+          </option>
+          <option value="86400">
+            {intl.formatMessage(messages.unsplashEveryDay)}
+          </option>
+          <option value="604800">
+            {intl.formatMessage(messages.unsplashEveryWeek)}
+          </option>
         </select>
       </label>
 
@@ -38,7 +57,7 @@ const UnsplashSettings: React.FC<Props> = (api) => {
           checked={data.by === "official"}
           onChange={() => patch({ by: "official" })}
         />{" "}
-        Official Collection
+        <FormattedMessage {...messages.unsplashOfficial} />
       </label>
 
       <label>
@@ -47,7 +66,7 @@ const UnsplashSettings: React.FC<Props> = (api) => {
           checked={data.by === "topics"}
           onChange={() => patch({ by: "topics" })}
         />{" "}
-        Topic
+        <FormattedMessage {...messages.unsplashTopic} />
       </label>
 
       <label>
@@ -56,7 +75,7 @@ const UnsplashSettings: React.FC<Props> = (api) => {
           checked={data.by === "search"}
           onChange={() => patch({ by: "search" })}
         />{" "}
-        Search
+        <FormattedMessage {...messages.unsplashSearch} />
       </label>
 
       <label>
@@ -65,12 +84,12 @@ const UnsplashSettings: React.FC<Props> = (api) => {
           checked={data.by === "collections"}
           onChange={() => patch({ by: "collections" })}
         />{" "}
-        Collection
+        <FormattedMessage {...messages.unsplashCollection} />
       </label>
 
       {data.by === "topics" && (
         <label>
-          Topic
+          <FormattedMessage {...messages.unsplashTopic} />
           <select
             value={data.topics}
             onChange={(event) => patch({ topics: event.target.value })}
@@ -87,11 +106,13 @@ const UnsplashSettings: React.FC<Props> = (api) => {
       {data.by === "search" && (
         <>
           <label>
-            Tags
+            <FormattedMessage {...messages.unsplashTags} />
             <DebounceInput
               type="text"
               value={data.search}
-              placeholder="Try landscapes or animals..."
+              placeholder={intl.formatMessage(
+                messages.unsplashSearchPlaceholder,
+              )}
               onChange={(value) => patch({ search: value })}
               wait={500}
             />
@@ -103,18 +124,20 @@ const UnsplashSettings: React.FC<Props> = (api) => {
               checked={data.featured}
               onChange={() => patch({ featured: !data.featured })}
             />{" "}
-            Only featured images
+            <FormattedMessage {...messages.unsplashFeatured} />
           </label>
         </>
       )}
 
       {data.by === "collections" && (
         <label>
-          Collection
+          <FormattedMessage {...messages.unsplashCollection} />
           <DebounceInput
             type="text"
             value={data.collections}
-            placeholder="Collection ID number"
+            placeholder={intl.formatMessage(
+              messages.unsplashCollectionPlaceholder,
+            )}
             onChange={(value) => patch({ collections: value })}
             wait={500}
           />

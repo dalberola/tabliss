@@ -46,8 +46,9 @@ verified against build, tests, and lint before moving on.
   persistent-storage prompt) and the background/widget display & font controls
   (blur, luminosity, font family/weight/colour/size, the collapsible
   "Open/Close …" sections, and widget action tooltips) now go through
-  `react-intl` (new strings start as English, ready for translators). The
-  individual widget plugin settings panels are still to come.
+  `react-intl`, as do the built-in **background** settings panels (Colour,
+  Gradient, Giphy, Image, Unsplash). New strings start as English, ready for
+  translators. The individual widget plugin settings panels are still to come.
 
 ### Fixed
 

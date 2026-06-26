@@ -1,10 +1,13 @@
 import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useObjectUrls } from "../../../hooks";
 import { IconButton, RemoveIcon } from "../../../views/shared";
+import { messages } from "../messages";
 import "./ImageSettings.sass";
 import { defaultCache, Props } from "./types";
 
 const ImageSettings: React.FC<Props> = ({ cache = defaultCache, setCache }) => {
+  const intl = useIntl();
   const urls = useObjectUrls(cache);
 
   const addImages = (files: FileList) =>
@@ -35,7 +38,7 @@ const ImageSettings: React.FC<Props> = ({ cache = defaultCache, setCache }) => {
               <img src={url} />
               <IconButton
                 onClick={() => removeImage(index)}
-                title="Remove image"
+                title={intl.formatMessage(messages.imageRemove)}
               >
                 <RemoveIcon />
               </IconButton>
@@ -44,10 +47,14 @@ const ImageSettings: React.FC<Props> = ({ cache = defaultCache, setCache }) => {
       </div>
 
       {largeImages && (
-        <p className="info">Large images may affect performance.</p>
+        <p className="info">
+          <FormattedMessage {...messages.imageLargeWarning} />
+        </p>
       )}
 
-      <p className="info">Images do not sync between devices.</p>
+      <p className="info">
+        <FormattedMessage {...messages.imageNoSync} />
+      </p>
     </div>
   );
 };

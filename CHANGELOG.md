@@ -34,10 +34,14 @@ verified against build, tests, and lint before moving on.
 
 - **Hebrew (`he`) now works.** A complete `he.json` translation shipped but was
   never registered, so selecting Hebrew silently fell back to English. Folding
-  the language list into one source registered it. (Like the already-shipping
-  `ar`/`fa`, it currently renders left-to-right — full RTL support is a separate
-  follow-up.) The unused `zh` placeholder, which had no catalogue and no picker
-  entry, was dropped; `zh-CN`/`zh-TW` are unaffected.
+  the language list into one source registered it. The unused `zh` placeholder,
+  which had no catalogue and no picker entry, was dropped; `zh-CN`/`zh-TW` are
+  unaffected.
+- **Right-to-left languages render correctly.** Arabic, Persian, and Hebrew
+  previously rendered left-to-right. The active locale is now reflected on
+  `<html>` as `dir` (`rtl` for those languages) and `lang` (for accessibility),
+  so the whole UI — dashboard, settings, modals — mirrors and reads correctly.
+  RTL is flagged per-language in the single `localeOptions` source.
 
 ### Performance
 

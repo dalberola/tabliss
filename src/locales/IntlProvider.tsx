@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IntlProvider as ReactIntlProvider } from "react-intl";
 import { db } from "../db/state";
 import { useValue } from "../lib/db/react";
-import { loadMessages, peekMessages } from "./locales";
+import { isRtlLocale, loadMessages, peekMessages } from "./locales";
 
 type Resolved = { locale: string; messages: Record<string, string> };
 
@@ -15,6 +15,15 @@ const IntlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     locale,
     messages: peekMessages(locale) ?? {},
   }));
+
+  // Reflect the active locale on <html> for the whole document (dashboard,
+  // settings, modals, portals): `lang` for accessibility and `dir` so
+  // right-to-left languages (Arabic, Persian, Hebrew) read correctly.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.lang = locale;
+    root.dir = isRtlLocale(locale) ? "rtl" : "ltr";
+  }, [locale]);
 
   useEffect(() => {
     let cancelled = false;

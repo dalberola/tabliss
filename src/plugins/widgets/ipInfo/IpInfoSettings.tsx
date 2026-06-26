@@ -1,6 +1,8 @@
 import React from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { defaultData, Props } from "./types";
 
 const IpInfoSettings: React.FC<Props> = (api) => {
@@ -14,7 +16,7 @@ const IpInfoSettings: React.FC<Props> = (api) => {
           checked={data.displayCity}
           onChange={() => patch({ displayCity: !data.displayCity })}
         />
-        Display City
+        <FormattedMessage {...messages.ipDisplayCity} />
       </label>
 
       <label>
@@ -23,7 +25,7 @@ const IpInfoSettings: React.FC<Props> = (api) => {
           checked={data.displayCountry}
           onChange={() => patch({ displayCountry: !data.displayCountry })}
         />
-        Display Country
+        <FormattedMessage {...messages.ipDisplayCountry} />
       </label>
     </div>
   );

@@ -91,4 +91,65 @@ export const messages = defineMessages({
     id: "widget.joke.showNew",
     defaultMessage: "Show a new joke",
   },
+
+  // CSS / JS snippets
+  cssSnippet: { id: "widget.css.snippet", defaultMessage: "CSS Snippet" },
+  cssWarning: {
+    id: "widget.css.warning",
+    defaultMessage:
+      "Warning: this functionality is intended for advanced users. Custom styles may break at any time.",
+  },
+  jsSnippet: {
+    id: "widget.js.snippet",
+    defaultMessage: "JavaScript Snippet",
+  },
+  jsApply: { id: "widget.js.apply", defaultMessage: "Apply" },
+  jsWarning: {
+    id: "widget.js.warning",
+    defaultMessage:
+      "Warning: this functionality is intended for advanced users. Custom scripts may break at any time. The snippet will run once after the dashboard has loaded. Be careful of persisting event listeners when editing the snippet.",
+  },
+
+  // IP Info
+  ipDisplayCity: {
+    id: "widget.ipInfo.displayCity",
+    defaultMessage: "Display City",
+  },
+  ipDisplayCountry: {
+    id: "widget.ipInfo.displayCountry",
+    defaultMessage: "Display Country",
+  },
+
+  // NBA
+  nbaDisplayLogo: {
+    id: "widget.nba.displayLogo",
+    defaultMessage: "Display team logo",
+  },
+
+  // Literature Clock
+  litShowBookAuthor: {
+    id: "widget.literatureClock.showBookAuthor",
+    defaultMessage: "Display book and author",
+  },
+  litCenterText: {
+    id: "widget.literatureClock.centerText",
+    defaultMessage: "Align text at center",
+  },
+
+  // Work Hours
+  workStartTime: {
+    id: "widget.workHours.startTime",
+    defaultMessage: "Start time",
+  },
+  workEndTime: {
+    id: "widget.workHours.endTime",
+    defaultMessage: "End time",
+  },
+  daySunday: { id: "widget.day.sunday", defaultMessage: "Sunday" },
+  dayMonday: { id: "widget.day.monday", defaultMessage: "Monday" },
+  dayTuesday: { id: "widget.day.tuesday", defaultMessage: "Tuesday" },
+  dayWednesday: { id: "widget.day.wednesday", defaultMessage: "Wednesday" },
+  dayThursday: { id: "widget.day.thursday", defaultMessage: "Thursday" },
+  dayFriday: { id: "widget.day.friday", defaultMessage: "Friday" },
+  daySaturday: { id: "widget.day.saturday", defaultMessage: "Saturday" },
 });

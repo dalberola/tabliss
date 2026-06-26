@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const NbaSettings: FC<Props> = (api) => {
@@ -14,7 +16,7 @@ const NbaSettings: FC<Props> = (api) => {
           checked={data.displayLogo}
           onChange={() => patch({ displayLogo: !data.displayLogo })}
         />{" "}
-        Display team logo
+        <FormattedMessage {...messages.nbaDisplayLogo} />
       </label>
     </div>
   );

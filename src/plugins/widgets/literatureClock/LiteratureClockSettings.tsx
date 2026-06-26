@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const LiteratureClockSettings: FC<Props> = (api) => {
@@ -14,7 +16,7 @@ const LiteratureClockSettings: FC<Props> = (api) => {
           checked={data.showBookAndAuthor}
           onChange={() => patch({ showBookAndAuthor: !data.showBookAndAuthor })}
         />{" "}
-        Display book and author
+        <FormattedMessage {...messages.litShowBookAuthor} />
       </label>
 
       <label>
@@ -23,7 +25,7 @@ const LiteratureClockSettings: FC<Props> = (api) => {
           checked={data.centerText}
           onChange={() => patch({ centerText: !data.centerText })}
         />{" "}
-        Align text at center
+        <FormattedMessage {...messages.litCenterText} />
       </label>
     </div>
   );

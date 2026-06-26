@@ -1,16 +1,18 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
-const daysList = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+const dayMessages = [
+  messages.daySunday,
+  messages.dayMonday,
+  messages.dayTuesday,
+  messages.dayWednesday,
+  messages.dayThursday,
+  messages.dayFriday,
+  messages.daySaturday,
 ];
 
 const WorkHoursSettings: FC<Props> = (api) => {
@@ -19,7 +21,7 @@ const WorkHoursSettings: FC<Props> = (api) => {
   return (
     <div className="WorkHoursSettings">
       <label>
-        Start time
+        <FormattedMessage {...messages.workStartTime} />
         <input
           type="time"
           value={data.startTime}
@@ -27,15 +29,15 @@ const WorkHoursSettings: FC<Props> = (api) => {
         />
       </label>
       <label>
-        End time
+        <FormattedMessage {...messages.workEndTime} />
         <input
           type="time"
           value={data.endTime}
           onChange={(event) => patch({ endTime: event.target.value })}
         />
       </label>
-      {daysList.map((day, index) => (
-        <div key={day}>
+      {dayMessages.map((dayMessage, index) => (
+        <div key={index}>
           <label>
             <input
               type="checkbox"
@@ -48,7 +50,7 @@ const WorkHoursSettings: FC<Props> = (api) => {
                 })
               }
             />
-            {day}
+            <FormattedMessage {...dayMessage} />
           </label>
         </div>
       ))}

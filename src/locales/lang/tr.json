@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Nem",
   "plugins.weather.low": "Düşük",
   "settings": "Ayarlar",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

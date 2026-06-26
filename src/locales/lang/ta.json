@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Humidity",
   "plugins.weather.low": "குறைந்த",
   "settings": "அமைப்புகள்",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

@@ -48,6 +48,13 @@ verified against build, tests, and lint before moving on.
   widget action tooltips), every built-in **background** panel (Colour, Gradient,
   Giphy, Image, Unsplash) and **all 18 widget** settings panels. New strings
   start as English, ready for translators to fill in.
+- **Account sign-in moved to a single Settings section.** The login / register /
+  log out / delete-account form was part of the Account Sync widget, so it could
+  be added to the dashboard multiple times — multiple login forms. It now lives
+  in one **Account Sync** section of the Settings panel (web only), so there is
+  always exactly one sign-in. The dashboard widget is kept purely as an optional
+  status indicator and renamed **Sync status**; its only setting is how the tile
+  is shown (icon / full text / hidden).
 
 ### Fixed
 

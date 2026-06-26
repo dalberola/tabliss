@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Humidity",
   "plugins.weather.low": "ต่ำสุด",
   "settings": "การตั้งค่า",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

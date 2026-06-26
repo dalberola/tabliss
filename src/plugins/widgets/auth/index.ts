@@ -4,8 +4,8 @@ import { Config } from "../../types";
 
 const config: Config = {
   key: "widget/auth",
-  name: "Account Sync",
-  description: "Sign in to sync your settings across devices.",
+  name: "Sync status",
+  description: "Show your account sync status on the dashboard.",
   dashboardComponent: lazy(() => import("./Auth")),
   settingsComponent: lazy(() => import("./AuthSettings")),
 };

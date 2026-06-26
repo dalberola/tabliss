@@ -7,6 +7,7 @@ import { useKeyPress } from "../../hooks";
 import { useKey } from "../../lib/db/react";
 import { Icon } from "../shared";
 import Logo from "../shared/Logo";
+import Account from "./Account";
 import Background from "./Background";
 import Persist from "./Persist";
 import "./Settings.sass";
@@ -89,6 +90,8 @@ const Settings: React.FC = () => {
         <Widgets />
 
         <System />
+
+        {BUILD_TARGET === "web" && <Account />}
 
         <p style={{ marginBottom: "2rem" }}>
           <FormattedMessage

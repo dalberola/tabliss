@@ -3,6 +3,11 @@ import { defineMessages } from "react-intl";
 // Strings for the global settings panel (System / Settings / Persist). Other
 // settings areas (background, per-widget panels) are localized separately.
 export const messages = defineMessages({
+  accountSync: {
+    id: "settings.accountSync",
+    defaultMessage: "Account Sync",
+    description: "Heading of the account sync (sign in) settings section",
+  },
   language: {
     id: "settings.language",
     defaultMessage: "Language",

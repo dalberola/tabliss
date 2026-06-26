@@ -36,6 +36,10 @@ verified against build, tests, and lint before moving on.
   churned files on every run), so it's safe to re-run and a CI guard can verify
   catalogues are in sync. The obsolete `whitelist_*.json` bookkeeping files were
   removed. No translation strings changed and the message set is identical.
+- **CI guards translation drift.** A `Translations in sync` job re-runs
+  `npm run translations` and fails if the language catalogues differ, so a
+  message added without regenerating can't be merged. Made possible by the
+  deterministic pipeline above.
 
 ### Fixed
 

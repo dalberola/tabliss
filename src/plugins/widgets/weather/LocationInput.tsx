@@ -1,6 +1,8 @@
 import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useDebounce, useToggle } from "../../../hooks";
 import { Icon } from "../../../views/shared";
+import { messages } from "../messages";
 import { searchLocations, requestLocation, LocationResult } from "./api";
 import "./LocationInput.sass";
 import { Coordinates } from "./types";
@@ -12,6 +14,7 @@ type Props = {
 };
 
 const GeocodeInput: React.FC<Props> = ({ onChange }) => {
+  const intl = useIntl();
   const [query, setQuery] = React.useState("");
   const [results, setResults] = React.useState<LocationResult[]>([]);
   const debouncedQuery = useDebounce(query, 300);
@@ -43,10 +46,12 @@ const GeocodeInput: React.FC<Props> = ({ onChange }) => {
 
   return (
     <div className="GeocodeInput">
-      <label htmlFor="LocationInput__query">Search for city</label>
+      <label htmlFor="LocationInput__query">
+        <FormattedMessage {...messages.weatherSearchCity} />
+      </label>
       <input
         id="LocationInput__query"
-        placeholder="City or location"
+        placeholder={intl.formatMessage(messages.weatherCityPlaceholder)}
         type="text"
         value={query}
         autoComplete="off"
@@ -76,10 +81,17 @@ const CoordinateInput: React.FC<Props> = ({
   longitude,
   onChange,
 }) => {
+  const intl = useIntl();
   const handleLocate = () => {
     requestLocation()
       .then(onChange)
-      .catch((err) => alert(`Cannot determine your location: ${err.message}`));
+      .catch((err) =>
+        alert(
+          intl.formatMessage(messages.weatherLocateError, {
+            error: err.message,
+          }),
+        ),
+      );
   };
 
   return (
@@ -92,9 +104,13 @@ const CoordinateInput: React.FC<Props> = ({
             : "1fr 1fr",
         }}
       >
-        <label htmlFor="LocationInput__latitude">Latitude</label>
+        <label htmlFor="LocationInput__latitude">
+          <FormattedMessage {...messages.weatherLatitude} />
+        </label>
 
-        <label htmlFor="LocationInput__longitude">Longitude</label>
+        <label htmlFor="LocationInput__longitude">
+          <FormattedMessage {...messages.weatherLongitude} />
+        </label>
 
         {geolocationAvailable && <div />}
 
@@ -130,6 +146,7 @@ const CoordinateInput: React.FC<Props> = ({
 };
 
 const LocationInput: React.FC<Props> = ({ onChange, ...props }) => {
+  const intl = useIntl();
   const hasCoordinates = props.longitude && props.latitude;
   const [lookUp, toggleLookUp] = useToggle(!hasCoordinates);
 
@@ -147,7 +164,9 @@ const LocationInput: React.FC<Props> = ({ onChange, ...props }) => {
       )}
 
       <a onClick={toggleLookUp}>
-        {lookUp ? "Enter coordinates" : "Search for city"}
+        {intl.formatMessage(
+          lookUp ? messages.weatherEnterCoordinates : messages.weatherSearchCity,
+        )}
       </a>
     </div>
   );

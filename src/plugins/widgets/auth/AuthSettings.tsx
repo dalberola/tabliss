@@ -1,7 +1,9 @@
 import React, { FC, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { useAuth } from "../../../contexts/auth";
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import "./AuthSettings.sass";
 import { AuthDisplay, Props, defaultData } from "./types";
 
@@ -9,21 +11,32 @@ import { AuthDisplay, Props, defaultData } from "./types";
 const DisplaySelect: FC<{
   value: AuthDisplay;
   onChange: (value: AuthDisplay) => void;
-}> = ({ value, onChange }) => (
-  <label className="auth-display">
-    Dashboard display
-    <select
-      value={value}
-      onChange={(event) => onChange(event.target.value as AuthDisplay)}
-    >
-      <option value="icon">Icon</option>
-      <option value="full">Full text</option>
-      <option value="hidden">Hidden</option>
-    </select>
-  </label>
-);
+}> = ({ value, onChange }) => {
+  const intl = useIntl();
+
+  return (
+    <label className="auth-display">
+      <FormattedMessage {...messages.authDashboardDisplay} />
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value as AuthDisplay)}
+      >
+        <option value="icon">
+          {intl.formatMessage(messages.authDisplayIcon)}
+        </option>
+        <option value="full">
+          {intl.formatMessage(messages.authDisplayFull)}
+        </option>
+        <option value="hidden">
+          {intl.formatMessage(messages.authDisplayHidden)}
+        </option>
+      </select>
+    </label>
+  );
+};
 
 const AuthSettings: FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
   const display = data.display ?? defaultData.display;
   const { status, email, error, lastSyncedAt, login, register, logout, deleteAccount } =
@@ -48,27 +61,41 @@ const AuthSettings: FC<Props> = (api) => {
       await deleteAccount();
     } catch (err) {
       setDeleteError(
-        err instanceof Error ? err.message : "Could not delete the account.",
+        err instanceof Error
+          ? err.message
+          : intl.formatMessage(messages.authDeleteFailed),
       );
       setDeleting(false);
     }
   };
 
   if (status === "loading") {
-    return <div className="AuthSettings">Loading…</div>;
+    return (
+      <div className="AuthSettings">
+        <FormattedMessage {...messages.authLoading} />
+      </div>
+    );
   }
 
   if (status === "authed") {
     return (
       <div className="AuthSettings">
         <p>
-          Signed in{email ? ` as ${email}` : ""}. Your settings sync
-          automatically across devices.
+          {email ? (
+            <FormattedMessage {...messages.authSignedInAs} values={{ email }} />
+          ) : (
+            <FormattedMessage {...messages.authSignedIn} />
+          )}
         </p>
         {lastSyncedAt ? (
           <p>
             <small>
-              Last synced {new Date(lastSyncedAt).toLocaleTimeString()}
+              <FormattedMessage
+                {...messages.authLastSynced}
+                values={{
+                  time: new Date(lastSyncedAt).toLocaleTimeString(),
+                }}
+              />
             </small>
           </p>
         ) : null}
@@ -78,7 +105,7 @@ const AuthSettings: FC<Props> = (api) => {
           className="button button--primary button--block"
           onClick={() => void logout()}
         >
-          Log out
+          <FormattedMessage {...messages.authLogOut} />
         </button>
 
         {!confirmingDelete ? (
@@ -90,14 +117,13 @@ const AuthSettings: FC<Props> = (api) => {
               setConfirmingDelete(true);
             }}
           >
-            Delete account
+            <FormattedMessage {...messages.authDeleteAccount} />
           </button>
         ) : (
           <div className="auth-danger">
             <p>
               <small>
-                This permanently deletes your account and the settings synced to
-                it. This cannot be undone. Your dashboard stays on this device.
+                <FormattedMessage {...messages.authDeleteWarning} />
               </small>
             </p>
             {deleteError ? <p role="alert">{deleteError}</p> : null}
@@ -108,7 +134,7 @@ const AuthSettings: FC<Props> = (api) => {
                 disabled={deleting}
                 onClick={() => setConfirmingDelete(false)}
               >
-                Cancel
+                <FormattedMessage {...messages.authCancel} />
               </button>
               <button
                 type="button"
@@ -116,7 +142,11 @@ const AuthSettings: FC<Props> = (api) => {
                 disabled={deleting}
                 onClick={() => void onDelete()}
               >
-                {deleting ? "…" : "Yes, delete"}
+                {deleting ? (
+                  "…"
+                ) : (
+                  <FormattedMessage {...messages.authConfirmDelete} />
+                )}
               </button>
             </div>
           </div>
@@ -135,7 +165,7 @@ const AuthSettings: FC<Props> = (api) => {
     try {
       if (mode === "register") {
         await register(mail, password);
-        setNotice("Check your email to verify your account, then log in.");
+        setNotice(intl.formatMessage(messages.authVerifyNotice));
         setMode("login");
         setPassword("");
         setAccepted(false);
@@ -143,7 +173,11 @@ const AuthSettings: FC<Props> = (api) => {
         await login(mail, password);
       }
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Something went wrong.");
+      setFormError(
+        err instanceof Error
+          ? err.message
+          : intl.formatMessage(messages.authGenericError),
+      );
     } finally {
       setBusy(false);
     }
@@ -152,7 +186,9 @@ const AuthSettings: FC<Props> = (api) => {
   return (
     <div className="AuthSettings">
       <p>
-        <small>Sign in to save your dashboard and sync it across devices.</small>
+        <small>
+          <FormattedMessage {...messages.authIntro} />
+        </small>
       </p>
 
       <div className="auth-tabs" role="tablist">
@@ -163,7 +199,7 @@ const AuthSettings: FC<Props> = (api) => {
           }`}
           onClick={() => setMode("login")}
         >
-          Log in
+          <FormattedMessage {...messages.authLogIn} />
         </button>
         <button
           type="button"
@@ -172,13 +208,13 @@ const AuthSettings: FC<Props> = (api) => {
           }`}
           onClick={() => setMode("register")}
         >
-          Create account
+          <FormattedMessage {...messages.authCreateAccount} />
         </button>
       </div>
 
       <form onSubmit={(e) => void onSubmit(e)}>
         <label>
-          Email
+          <FormattedMessage {...messages.authEmail} />
           <input
             type="email"
             required
@@ -188,7 +224,7 @@ const AuthSettings: FC<Props> = (api) => {
           />
         </label>
         <label>
-          Password
+          <FormattedMessage {...messages.authPassword} />
           <input
             type="password"
             required
@@ -209,17 +245,26 @@ const AuthSettings: FC<Props> = (api) => {
                 checked={accepted}
                 onChange={(e) => setAccepted(e.target.checked)}
               />{" "}
-              I accept the{" "}
-              <a href="/terms.html" target="_blank" rel="noreferrer">
-                Terms
-              </a>{" "}
-              and{" "}
-              <a href="/privacy.html" target="_blank" rel="noreferrer">
-                Privacy Policy
-              </a>
+              <FormattedMessage
+                {...messages.authAccept}
+                values={{
+                  terms: (chunks) => (
+                    <a href="/terms.html" target="_blank" rel="noreferrer">
+                      {chunks}
+                    </a>
+                  ),
+                  privacy: (chunks) => (
+                    <a href="/privacy.html" target="_blank" rel="noreferrer">
+                      {chunks}
+                    </a>
+                  ),
+                }}
+              />
             </label>
             <p>
-              <small>Password must be at least 12 characters.</small>
+              <small>
+                <FormattedMessage {...messages.authPasswordHint} />
+              </small>
             </p>
           </>
         ) : null}
@@ -229,7 +274,11 @@ const AuthSettings: FC<Props> = (api) => {
           className="button button--primary button--block"
           disabled={busy || (mode === "register" && !accepted)}
         >
-          {busy ? "…" : mode === "register" ? "Create account" : "Log in"}
+          {busy
+            ? "…"
+            : mode === "register"
+              ? intl.formatMessage(messages.authCreateAccount)
+              : intl.formatMessage(messages.authLogIn)}
         </button>
       </form>
 

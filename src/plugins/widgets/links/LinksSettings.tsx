@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData, useSavedReducer } from "../../../hooks";
+import { messages } from "../messages";
 import Input from "./Input";
 import { addLink, removeLink, reorderLink, updateLink } from "./actions";
 import { reducer } from "./reducer";
@@ -14,7 +16,7 @@ const LinksSettings: FC<Props> = (api) => {
   return (
     <div className="LinksSettings">
       <label>
-        Number of columns
+        <FormattedMessage {...messages.linksColumns} />
         <input
           type="number"
           value={data.columns}
@@ -29,7 +31,7 @@ const LinksSettings: FC<Props> = (api) => {
           checked={data.visible}
           onChange={() => patch({ visible: !data.visible })}
         />
-        Links are always visible
+        <FormattedMessage {...messages.linksAlwaysVisible} />
       </label>
 
       <label>
@@ -38,7 +40,7 @@ const LinksSettings: FC<Props> = (api) => {
           checked={data.linkOpenStyle}
           onChange={() => patch({ linkOpenStyle: !data.linkOpenStyle })}
         />
-        Links open in a new tab
+        <FormattedMessage {...messages.linksNewTab} />
       </label>
 
       <hr />
@@ -70,7 +72,7 @@ const LinksSettings: FC<Props> = (api) => {
           className="button button--primary"
           onClick={() => dispatch(addLink())}
         >
-          Add link
+          <FormattedMessage {...messages.linksAdd} />
         </button>
       </p>
     </div>

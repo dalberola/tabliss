@@ -40,18 +40,14 @@ verified against build, tests, and lint before moving on.
   `npm run translations` and fails if the language catalogues differ, so a
   message added without regenerating can't be merged. Made possible by the
   deterministic pipeline above.
-- **Settings panel is now localizable (in progress).** Translations previously
-  stopped at the dashboard. The global settings panel (language, time zone and
-  opacity labels, the import/export/reset line, the support section, the
-  persistent-storage prompt) and the background/widget display & font controls
-  (blur, luminosity, font family/weight/colour/size, the collapsible
-  "Open/Close …" sections, and widget action tooltips) now go through
-  `react-intl`, as do the built-in **background** settings panels (Colour,
-  Gradient, Giphy, Image, Unsplash) and most **widget** settings panels (Time,
-  Greeting, Todo, Message, Quote, Countdown, Joke, CSS, JS, IP Info, NBA, Work
-  Hours, Literature Clock). New strings start as English, ready for translators.
-  A few data-source widget panels (Auth, Search, Weather, GitHub, Links) are the
-  last still to come.
+- **The settings menu is now fully localizable.** Translations previously
+  stopped at the dashboard. The entire settings UI now goes through `react-intl`:
+  the global panel (language/time zone/opacity, import/export/reset, support,
+  persistent-storage prompt), the display & font controls (blur, luminosity,
+  font family/weight/colour/size, the collapsible "Open/Close …" sections,
+  widget action tooltips), every built-in **background** panel (Colour, Gradient,
+  Giphy, Image, Unsplash) and **all 18 widget** settings panels. New strings
+  start as English, ready for translators to fill in.
 
 ### Fixed
 

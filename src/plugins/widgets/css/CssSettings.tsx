@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const CssSettings: FC<Props> = (api) => {
@@ -9,7 +11,7 @@ const CssSettings: FC<Props> = (api) => {
   return (
     <div className="CssSettings">
       <label>
-        CSS Snippet
+        <FormattedMessage {...messages.cssSnippet} />
         <textarea
           rows={3}
           style={{ fontFamily: "monospace" }}
@@ -19,8 +21,7 @@ const CssSettings: FC<Props> = (api) => {
       </label>
 
       <p className="info">
-        Warning: this functionality is intended for advanced users. Custom styles
-        may break at any time.
+        <FormattedMessage {...messages.cssWarning} />
       </p>
     </div>
   );

@@ -47,10 +47,11 @@ verified against build, tests, and lint before moving on.
   (blur, luminosity, font family/weight/colour/size, the collapsible
   "Open/Close …" sections, and widget action tooltips) now go through
   `react-intl`, as do the built-in **background** settings panels (Colour,
-  Gradient, Giphy, Image, Unsplash) and a first set of **widget** settings
-  panels (Time, Greeting, Todo, Message, Quote, Countdown, Joke). New strings
-  start as English, ready for translators. The remaining widget settings panels
-  are being localized batch by batch.
+  Gradient, Giphy, Image, Unsplash) and most **widget** settings panels (Time,
+  Greeting, Todo, Message, Quote, Countdown, Joke, CSS, JS, IP Info, NBA, Work
+  Hours, Literature Clock). New strings start as English, ready for translators.
+  A few data-source widget panels (Auth, Search, Weather, GitHub, Links) are the
+  last still to come.
 
 ### Fixed
 

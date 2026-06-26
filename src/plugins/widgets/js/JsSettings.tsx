@@ -1,6 +1,8 @@
 import React, { FC, useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const JsSettings: FC<Props> = (api) => {
@@ -11,7 +13,7 @@ const JsSettings: FC<Props> = (api) => {
   return (
     <div className="JsSettings">
       <label>
-        JavaScript Snippet
+        <FormattedMessage {...messages.jsSnippet} />
         <textarea
           rows={3}
           style={{ fontFamily: "monospace" }}
@@ -20,13 +22,12 @@ const JsSettings: FC<Props> = (api) => {
         />
       </label>
 
-      <button onClick={handleSave}>Apply</button>
+      <button onClick={handleSave}>
+        <FormattedMessage {...messages.jsApply} />
+      </button>
 
       <p className="info">
-        Warning: this functionality is intended for advanced users. Custom
-        scripts may break at any time. The snippet will run once after the
-        dashboard has loaded. Be careful of persisting event listeners when
-        editing the snippet.
+        <FormattedMessage {...messages.jsWarning} />
       </p>
     </div>
   );

@@ -24,6 +24,20 @@ verified against build, tests, and lint before moving on.
     coerced to an `Error` before being captured.
 - **Lint cleaned to zero warnings.** Removed an unused import and a dead
   `eslint-disable` directive in `src/db/migrations/migrate2.ts`.
+- **Single source of truth for languages.** The language list lived in two
+  places that had drifted — the `locales` array in `src/locales/locales.ts` and
+  a hand-written `<option>` list in `src/views/settings/System.tsx`. Both are now
+  generated from one `localeOptions` list (code + native label + English name),
+  so adding a language is a single edit.
+
+### Fixed
+
+- **Hebrew (`he`) now works.** A complete `he.json` translation shipped but was
+  never registered, so selecting Hebrew silently fell back to English. Folding
+  the language list into one source registered it. (Like the already-shipping
+  `ar`/`fa`, it currently renders left-to-right — full RTL support is a separate
+  follow-up.) The unused `zh` placeholder, which had no catalogue and no picker
+  entry, was dropped; `zh-CN`/`zh-TW` are unaffected.
 
 ### Performance
 

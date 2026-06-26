@@ -1,4 +1,5 @@
 import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { setWidgetDisplay } from "../../db/action";
 import { WidgetState } from "../../db/state";
 import { useToggle } from "../../hooks";
@@ -8,6 +9,7 @@ import PluginContainer from "../shared/Plugin";
 import ToggleSection from "../shared/ToggleSection";
 import "./Widget.sass";
 import WidgetDisplay from "./WidgetDisplay";
+import { messages } from "./messages";
 
 function hexToRgba(colour: string | undefined): { hex: string; alpha: number } {
   if (!colour) return { hex: "#ffffff", alpha: 1 };
@@ -46,6 +48,7 @@ const Widget: React.FC<Props> = ({
   onMoveUp,
   onRemove,
 }) => {
+  const intl = useIntl();
   const [isOpen, toggleIsOpen] = useToggle(onRemove === undefined);
 
   const { description, name, settingsComponent } = getConfig(plugin.key);
@@ -56,25 +59,36 @@ const Widget: React.FC<Props> = ({
   return (
     <fieldset className="Widget">
       <div className="title--buttons">
-        <IconButton onClick={onRemove} title="Remove widget">
+        <IconButton
+          onClick={onRemove}
+          title={intl.formatMessage(messages.removeWidget)}
+        >
           <RemoveIcon />
         </IconButton>
 
         <IconButton
           onClick={toggleIsOpen}
-          title={`${isOpen ? "Close" : "Edit"} widget settings`}
+          title={intl.formatMessage(
+            isOpen ? messages.closeWidgetSettings : messages.editWidgetSettings,
+          )}
         >
           <Icon name="settings" />
         </IconButton>
 
         {onMoveDown && (
-          <IconButton onClick={onMoveDown} title="Move widget down">
+          <IconButton
+            onClick={onMoveDown}
+            title={intl.formatMessage(messages.moveWidgetDown)}
+          >
             <DownIcon />
           </IconButton>
         )}
 
         {onMoveUp && (
-          <IconButton onClick={onMoveUp} title="Move widget up">
+          <IconButton
+            onClick={onMoveUp}
+            title={intl.formatMessage(messages.moveWidgetUp)}
+          >
             <UpIcon />
           </IconButton>
         )}
@@ -91,14 +105,14 @@ const Widget: React.FC<Props> = ({
             </div>
           )}
 
-          <ToggleSection name="Display Settings">
+          <ToggleSection name={intl.formatMessage(messages.displaySettings)}>
             <WidgetDisplay display={plugin.display} onChange={setDisplay} />
           </ToggleSection>
 
-          <ToggleSection name="Font Settings">
+          <ToggleSection name={intl.formatMessage(messages.fontSettings)}>
             <>
               <label>
-                Font
+                <FormattedMessage {...messages.font} />
                 <select
                   value={plugin.display.fontFamily ?? ""}
                   onChange={(event) =>
@@ -107,7 +121,9 @@ const Widget: React.FC<Props> = ({
                     })
                   }
                 >
-                  <option value="">Default</option>
+                  <option value="">
+                    {intl.formatMessage(messages.fontDefault)}
+                  </option>
                   <optgroup label="Sans-serif">
                     <option value="Arial">Arial</option>
                     <option value="Helvetica">Helvetica</option>
@@ -139,7 +155,7 @@ const Widget: React.FC<Props> = ({
               </label>
 
               <label>
-                Weight
+                <FormattedMessage {...messages.weight} />
                 <select
                   value={plugin.display.fontWeight}
                   onChange={(event) =>
@@ -150,18 +166,32 @@ const Widget: React.FC<Props> = ({
                     })
                   }
                 >
-                  <option value="">Default</option>
-                  <option value="100">Thin</option>
-                  <option value="300">Light</option>
-                  <option value="400">Regular</option>
-                  <option value="500">Medium</option>
-                  <option value="700">Bold</option>
-                  <option value="900">Black</option>
+                  <option value="">
+                    {intl.formatMessage(messages.fontDefault)}
+                  </option>
+                  <option value="100">
+                    {intl.formatMessage(messages.weightThin)}
+                  </option>
+                  <option value="300">
+                    {intl.formatMessage(messages.weightLight)}
+                  </option>
+                  <option value="400">
+                    {intl.formatMessage(messages.weightRegular)}
+                  </option>
+                  <option value="500">
+                    {intl.formatMessage(messages.weightMedium)}
+                  </option>
+                  <option value="700">
+                    {intl.formatMessage(messages.weightBold)}
+                  </option>
+                  <option value="900">
+                    {intl.formatMessage(messages.weightBlack)}
+                  </option>
                 </select>
               </label>
 
               <label>
-                Colour
+                <FormattedMessage {...messages.colour} />
                 <input
                   type="color"
                   value={colourHex}
@@ -174,7 +204,8 @@ const Widget: React.FC<Props> = ({
               </label>
 
               <label>
-                Opacity {Math.round(colourAlpha * 100)}%
+                <FormattedMessage {...messages.opacity} />{" "}
+                {Math.round(colourAlpha * 100)}%
                 <input
                   type="range"
                   min="0"

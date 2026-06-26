@@ -77,4 +77,102 @@ export const messages = defineMessages({
     defaultMessage: "Could not persist settings at this time.",
     description: "Shown when persistent storage could not be enabled",
   },
+
+  // Background & widget display/font settings (stage 2)
+  displaySettings: {
+    id: "settings.displaySettings",
+    defaultMessage: "Display Settings",
+    description: "Collapsible section name for display settings",
+  },
+  fontSettings: {
+    id: "settings.fontSettings",
+    defaultMessage: "Font Settings",
+    description: "Collapsible section name for font settings",
+  },
+  blur: {
+    id: "settings.blur",
+    defaultMessage: "Blur",
+    description: "Background blur slider label",
+  },
+  luminosity: {
+    id: "settings.luminosity",
+    defaultMessage: "Luminosity",
+    description: "Background luminosity slider label",
+  },
+  darken: {
+    id: "settings.darken",
+    defaultMessage: "Darken",
+    description: "Luminosity slider min marker",
+  },
+  lighten: {
+    id: "settings.lighten",
+    defaultMessage: "Lighten",
+    description: "Luminosity slider max marker",
+  },
+  removeWidget: {
+    id: "settings.removeWidget",
+    defaultMessage: "Remove widget",
+    description: "Tooltip on the remove-widget button",
+  },
+  editWidgetSettings: {
+    id: "settings.editWidgetSettings",
+    defaultMessage: "Edit widget settings",
+    description: "Tooltip to open a widget's settings",
+  },
+  closeWidgetSettings: {
+    id: "settings.closeWidgetSettings",
+    defaultMessage: "Close widget settings",
+    description: "Tooltip to close a widget's settings",
+  },
+  moveWidgetUp: {
+    id: "settings.moveWidgetUp",
+    defaultMessage: "Move widget up",
+    description: "Tooltip to reorder a widget up",
+  },
+  moveWidgetDown: {
+    id: "settings.moveWidgetDown",
+    defaultMessage: "Move widget down",
+    description: "Tooltip to reorder a widget down",
+  },
+  font: {
+    id: "settings.font",
+    defaultMessage: "Font",
+    description: "Font family selector label",
+  },
+  fontDefault: {
+    id: "settings.fontDefault",
+    defaultMessage: "Default",
+    description: "Default option for font family and weight",
+  },
+  weight: {
+    id: "settings.weight",
+    defaultMessage: "Weight",
+    description: "Font weight selector label",
+  },
+  weightThin: { id: "settings.weightThin", defaultMessage: "Thin" },
+  weightLight: { id: "settings.weightLight", defaultMessage: "Light" },
+  weightRegular: { id: "settings.weightRegular", defaultMessage: "Regular" },
+  weightMedium: { id: "settings.weightMedium", defaultMessage: "Medium" },
+  weightBold: { id: "settings.weightBold", defaultMessage: "Bold" },
+  weightBlack: { id: "settings.weightBlack", defaultMessage: "Black" },
+  colour: {
+    id: "settings.colour",
+    defaultMessage: "Colour",
+    description: "Widget text colour label",
+  },
+  size: {
+    id: "settings.size",
+    defaultMessage: "Size",
+    description: "Widget size slider label",
+  },
+  toggleOpen: {
+    id: "settings.toggleOpen",
+    defaultMessage: "Open {name}",
+    description: "Link to expand a collapsible settings section",
+  },
+  toggleClose: {
+    id: "settings.toggleClose",
+    defaultMessage: "Close {name}",
+    description: "Link to collapse a collapsible settings section",
+  },
 });

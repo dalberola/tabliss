@@ -1,13 +1,15 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { setBackground } from "../../db/action";
 import { BackgroundDisplay, db } from "../../db/state";
 import { useKey } from "../../lib/db/react";
 import { backgroundConfigs, getConfig } from "../../plugins";
 import Plugin from "../shared/Plugin";
 import ToggleSection from "../shared/ToggleSection";
+import { messages } from "./messages";
 
 const Background: React.FC = () => {
+  const intl = useIntl();
   const [data, setData] = useKey(db, "background");
 
   const plugin = getConfig(data.key);
@@ -51,10 +53,10 @@ const Background: React.FC = () => {
           )}
 
           {plugin.supportsBackdrop && (
-            <ToggleSection name="Display Settings">
+            <ToggleSection name={intl.formatMessage(messages.displaySettings)}>
               <>
                 <label>
-                  Blur <br />
+                  <FormattedMessage {...messages.blur} /> <br />
                   <input
                     type="range"
                     list="blur-markers"
@@ -75,7 +77,7 @@ const Background: React.FC = () => {
                 </label>
 
                 <label>
-                  Luminosity <br />
+                  <FormattedMessage {...messages.luminosity} /> <br />
                   <input
                     type="range"
                     list="luminosity-markers"
@@ -90,9 +92,15 @@ const Background: React.FC = () => {
                     }
                   />
                   <datalist id="luminosity-markers">
-                    <option value="-1" label="Darken" />
+                    <option
+                      value="-1"
+                      label={intl.formatMessage(messages.darken)}
+                    />
                     <option value="0" />
-                    <option value="1" label="Lighten" />
+                    <option
+                      value="1"
+                      label={intl.formatMessage(messages.lighten)}
+                    />
                   </datalist>
                 </label>
               </>

@@ -1,5 +1,7 @@
 import React from "react";
+import { FormattedMessage } from "react-intl";
 import { WidgetDisplay as WidgetDisplayType } from "../../db/state";
+import { messages } from "./messages";
 
 type Props = {
   display: WidgetDisplayType;
@@ -10,7 +12,7 @@ const WidgetDisplay: React.FC<Props> = ({ display, onChange }) => {
   return (
     <div className="WidgetDisplay">
       <label>
-        Size
+        <FormattedMessage {...messages.size} />
         <br />
         <input
           type="range"

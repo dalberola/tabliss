@@ -41,11 +41,13 @@ verified against build, tests, and lint before moving on.
   message added without regenerating can't be merged. Made possible by the
   deterministic pipeline above.
 - **Settings panel is now localizable (in progress).** Translations previously
-  stopped at the dashboard. The global settings panel — language, time zone and
-  opacity labels, the import/export/reset line, the support section, and the
-  persistent-storage prompt — now goes through `react-intl` (new strings start
-  as English, ready for translators). Background and per-widget settings panels
-  are still to come.
+  stopped at the dashboard. The global settings panel (language, time zone and
+  opacity labels, the import/export/reset line, the support section, the
+  persistent-storage prompt) and the background/widget display & font controls
+  (blur, luminosity, font family/weight/colour/size, the collapsible
+  "Open/Close …" sections, and widget action tooltips) now go through
+  `react-intl` (new strings start as English, ready for translators). The
+  individual widget plugin settings panels are still to come.
 
 ### Fixed
 

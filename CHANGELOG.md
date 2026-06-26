@@ -25,6 +25,17 @@ verified against build, tests, and lint before moving on.
 - **Lint cleaned to zero warnings.** Removed an unused import and a dead
   `eslint-disable` directive in `src/db/migrations/migrate2.ts`.
 
+### Performance
+
+- **Language catalogues are now code-split and loaded on demand.** Previously
+  all ~45 translation files (~180 KiB of JSON) were statically imported into
+  `src/locales/locales.ts` and shipped in the main bundle to every visitor.
+  Each `src/locales/lang/<code>.json` is now a lazy chunk fetched only when its
+  language is active; `locales.ts` keeps just the locale list. This drops the
+  web `main` bundle from ~134 KiB to ~43 KiB. Behaviour is unchanged — the
+  active locale loads on boot and on language switch (`IntlProvider` falls back
+  to source strings for the frame before a catalogue resolves).
+
 ### Security
 
 - **`uuid` advisory (GHSA-w5hq-g745-h8pq) patched** via an `overrides` entry that

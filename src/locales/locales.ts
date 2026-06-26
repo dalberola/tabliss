@@ -1,11 +1,12 @@
 import { pick } from "in-browser-language";
 
-/** A selectable language: its code, endonym (shown in the picker), and an
- * English name (used for the option's tooltip). */
+/** A selectable language: its code, endonym (shown in the picker), an English
+ * name (used for the option's tooltip), and whether it is right-to-left. */
 export interface LocaleOption {
   code: string;
   label: string;
   name: string;
+  rtl?: boolean;
 }
 
 /**
@@ -20,7 +21,7 @@ export interface LocaleOption {
  * strings (each message's `defaultMessage`).
  */
 export const localeOptions: LocaleOption[] = [
-  { code: "ar", label: "العربية", name: "Arabic" },
+  { code: "ar", label: "العربية", name: "Arabic", rtl: true },
   { code: "ca-ES", label: "Català", name: "Catalan" },
   { code: "cs", label: "Čeština", name: "Czech" },
   { code: "de", label: "Deutsch", name: "German" },
@@ -30,9 +31,9 @@ export const localeOptions: LocaleOption[] = [
   { code: "en-GB", label: "English (GB)", name: "English (British)" },
   { code: "en", label: "English (US)", name: "English (American)" },
   { code: "es", label: "Español", name: "Spanish" },
-  { code: "fa", label: "پارسی", name: "Persian" },
+  { code: "fa", label: "پارسی", name: "Persian", rtl: true },
   { code: "fr", label: "Français", name: "French" },
-  { code: "he", label: "עברית", name: "Hebrew" },
+  { code: "he", label: "עברית", name: "Hebrew", rtl: true },
   { code: "ga", label: "Gaeilge", name: "Gaeilge" },
   { code: "gd", label: "Gàidhlig", name: "Scottish Gaelic" },
   { code: "gl", label: "Galego", name: "Galician" },
@@ -70,6 +71,15 @@ export const localeOptions: LocaleOption[] = [
 export const locales = localeOptions.map((option) => option.code);
 
 export const defaultLocale = pick(locales, "en");
+
+const RTL_LOCALES = new Set(
+  localeOptions.filter((option) => option.rtl).map((option) => option.code),
+);
+
+/** Whether a locale is written right-to-left (Arabic, Persian, Hebrew, …). */
+export function isRtlLocale(locale: string): boolean {
+  return RTL_LOCALES.has(locale);
+}
 
 // Locales that intentionally have no catalogue file (they ARE the source).
 const SOURCE_LOCALES = new Set(["en"]);

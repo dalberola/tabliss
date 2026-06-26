@@ -1,84 +1,59 @@
+/*
+ * Syncs the per-language catalogues in src/locales/lang/ against the source
+ * messages, deterministically.
+ *
+ * The `translations` npm script runs `formatjs extract` first, which writes the
+ * source catalogue (English defaults) to
+ * src/locales/extractedMessages/en.json as `{ id: defaultMessage }`. This
+ * script then rewrites every src/locales/lang/<code>.json so that it:
+ *   - keeps every existing translation untouched,
+ *   - fills any missing message id with the English default,
+ *   - drops ids that are no longer in the source,
+ *   - sorts keys.
+ *
+ * Because the output depends only on the inputs (no timestamps, no random
+ * ordering), running it twice on an unchanged tree produces no diff — which a
+ * CI guard can rely on, unlike the previous react-intl-translations-manager
+ * flow.
+ *
+ * To add a language: create an empty src/locales/lang/<code>.json (`{}`), add
+ * it to `localeOptions` in src/locales/locales.ts, then run
+ * `npm run translations` to populate it.
+ */
+
 const fs = require("fs");
-const { promisify } = require("util");
-const glob = promisify(require("glob"));
-const manageTranslations = require("react-intl-translations-manager").default;
-const parser = require("typescript-react-intl").default;
+const path = require("path");
 
-// Add your language here
-// `xx` and `xx-XX` formats are accepted (e.g. 'en' or 'en-AU')
-// Then run `npm run translations` to create your language files!
-const languages = [
-  "ar",
-  "ca-ES",
-  "cs",
-  "de",
-  "el",
-  "en-AU",
-  "en-CA",
-  "en-GB",
-  "es",
-  "fa",
-  "fi",
-  "fr",
-  "he",
-  "ga",
-  "gd",
-  "gl",
-  "gu",
-  "hi",
-  "hu",
-  "id",
-  "it",
-  "ja",
-  "ko",
-  "kp",
-  "lb",
-  "lt",
-  "ne",
-  "nl",
-  "no",
-  "pl",
-  "pt",
-  "pt-BR",
-  "ro",
-  "ru",
-  "sk",
-  "sr",
-  "sv",
-  "ta",
-  "th",
-  "tr",
-  "vi",
-  "zh-CN",
-  "zh-TW",
-  "uk",
-];
+const langDir = path.join(__dirname, "..", "src", "locales", "lang");
+const sourceFile = path.join(
+  __dirname,
+  "..",
+  "src",
+  "locales",
+  "extractedMessages",
+  "en.json",
+);
 
-async function main() {
-  // Extract messages from source
-  const files = await glob("src/**/*.@(tsx|ts)");
-  const messages = files
-    .map((file) => fs.readFileSync(file).toString())
-    .reduce((carry, contents) => carry.concat(parser(contents)), []);
+const defaults = JSON.parse(fs.readFileSync(sourceFile, "utf8"));
+const ids = Object.keys(defaults).sort();
 
-  // Write messages to file
-  fs.writeFileSync(
-    "./src/locales/extractedMessages/messages.json",
-    JSON.stringify(messages, null, 2),
-  );
+const files = fs
+  .readdirSync(langDir)
+  .filter((name) => name.endsWith(".json") && !name.startsWith("whitelist"));
 
-  // Manage translations
-  manageTranslations({
-    languages,
-    jsonOptions: {
-      space: 2,
-      trailingNewline: true,
-    },
-    messagesDirectory: "src/locales/extractedMessages",
-    translationsDirectory: "src/locales/lang/",
-  });
+for (const name of files) {
+  const file = path.join(langDir, name);
+  const existing = JSON.parse(fs.readFileSync(file, "utf8"));
+
+  // Build in sorted id order so the output is deterministic.
+  const next = {};
+  for (const id of ids) {
+    next[id] = Object.prototype.hasOwnProperty.call(existing, id)
+      ? existing[id]
+      : defaults[id];
+  }
+
+  fs.writeFileSync(file, JSON.stringify(next, null, 2) + "\n");
 }
 
-// Go go go!
-// https://www.youtube.com/watch?v=H9dzpBa73_8
-main().catch(console.error);
+console.log(`Synced ${files.length} locales against ${ids.length} messages.`);

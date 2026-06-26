@@ -4,6 +4,7 @@ import { db } from "../../db/state";
 import { useKey } from "../../lib/db/react";
 import { localeOptions } from "../../locales";
 import TimeZoneInput from "../shared/timeZone/TimeZoneInput";
+import { messages } from "./messages";
 
 const System: React.FC = () => {
   const [locale, setLocale] = useKey(db, "locale");
@@ -30,7 +31,9 @@ const System: React.FC = () => {
           margin: 0,
         }}
       >
-        <span>Language</span>
+        <span>
+          <FormattedMessage {...messages.language} />
+        </span>
         <select
           value={locale}
           onChange={(event) => setLocale(event.target.value)}
@@ -53,7 +56,7 @@ const System: React.FC = () => {
           margin: 0,
         }}
       >
-        Time Zone
+        <FormattedMessage {...messages.timeZone} />
         <TimeZoneInput timeZone={timeZone} onChange={setTimeZone} />
       </label>
 
@@ -65,7 +68,9 @@ const System: React.FC = () => {
             marginBottom: "0.1rem",
           }}
         >
-          <span>Opacity</span>
+          <span>
+            <FormattedMessage {...messages.opacity} />
+          </span>
           <span style={{ opacity: 0.6, fontSize: "0.9em" }}>
             {Math.round((sidebarOpacity ?? 0.92) * 100)}%
           </span>

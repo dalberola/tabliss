@@ -46,6 +46,10 @@ jobs:
         env:
           GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
           UNSPLASH_API_KEY: ${{ secrets.UNSPLASH_API_KEY }}
+          # Public reCAPTCHA v3 site key (repo Variable, not a Secret — it ships
+          # in the client bundle). Empty/unset disables the client check; keep it
+          # in lockstep with the auth service's RECAPTCHA_SECRET.
+          RECAPTCHA_SITE_KEY: ${{ vars.RECAPTCHA_SITE_KEY }}
 
       - name: Resolve + sanity-check deploy target
         id: target

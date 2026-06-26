@@ -38,3 +38,23 @@ jobs:
         with:
           name: tabliss-${{ matrix.build_target }}
           path: dist/${{ matrix.build_target }}
+  i18n:
+    name: Translations in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # Re-extract messages and re-sync the language catalogues. The pipeline is
+      # deterministic, so on an up-to-date branch this changes nothing.
+      - run: npm run translations
+      - name: Fail if catalogues drifted
+        run: |
+          if ! git diff --quiet src/locales/lang; then
+            echo "::error::Translation catalogues are out of date. Run 'npm run translations' and commit the result." >&2
+            git --no-pager diff --stat src/locales/lang >&2
+            exit 1
+          fi

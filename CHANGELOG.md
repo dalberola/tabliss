@@ -40,6 +40,12 @@ verified against build, tests, and lint before moving on.
   `npm run translations` and fails if the language catalogues differ, so a
   message added without regenerating can't be merged. Made possible by the
   deterministic pipeline above.
+- **Settings panel is now localizable (in progress).** Translations previously
+  stopped at the dashboard. The global settings panel — language, time zone and
+  opacity labels, the import/export/reset line, the support section, and the
+  persistent-storage prompt — now goes through `react-intl` (new strings start
+  as English, ready for translators). Background and per-widget settings panels
+  are still to come.
 
 ### Fixed
 

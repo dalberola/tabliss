@@ -1,7 +1,7 @@
 # Adding Translations
 
 This document gives you a step by step guide for how to add your own translations to Tabliss!
-Translations are currently only available for the main dashboard (not the settings menu).
+The dashboard and the core settings panel are translatable; some per-widget settings panels are still being localized.
 
 1. Fork and checkout the repository
 2. Run `npm install` to download the dependencies

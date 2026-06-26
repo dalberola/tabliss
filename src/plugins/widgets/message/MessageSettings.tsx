@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const MessageSettings: FC<Props> = (api) => {
@@ -9,7 +11,7 @@ const MessageSettings: FC<Props> = (api) => {
   return (
     <div className="MessageSettings">
       <label>
-        Message
+        <FormattedMessage {...messages.messageLabel} />
         <textarea
           rows={3}
           value={data.messages[0]}

@@ -1,7 +1,9 @@
 import React, { FC } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
 import { IconButton, RemoveIcon } from "../../../views/shared";
+import { messages } from "../messages";
 import { Entry, Props, defaultData } from "./types";
 import "./Countdown.sass";
 
@@ -33,6 +35,7 @@ function applyMinutes(ts: number, val: string): number {
 }
 
 const CountdownSettings: FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
   const entries = data.entries ?? [];
 
@@ -70,10 +73,13 @@ const CountdownSettings: FC<Props> = (api) => {
               <input
                 type="text"
                 value={entry.label}
-                placeholder="Event name"
+                placeholder={intl.formatMessage(messages.countdownEventName)}
                 onChange={(e) => updateEntry(entry.id, { label: e.target.value })}
               />
-              <IconButton onClick={() => removeEntry(entry.id)} title="Remove event">
+              <IconButton
+                onClick={() => removeEntry(entry.id)}
+                title={intl.formatMessage(messages.countdownRemove)}
+              >
                 <RemoveIcon />
               </IconButton>
             </div>
@@ -115,7 +121,7 @@ const CountdownSettings: FC<Props> = (api) => {
 
       <p style={{ marginTop: "0.5rem" }}>
         <button className="button button--primary" onClick={addEntry}>
-          Add event
+          <FormattedMessage {...messages.countdownAdd} />
         </button>
       </p>
     </div>

@@ -1,26 +1,29 @@
 import React, { FC } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
 import TimeZoneInput from "../../../views/shared/timeZone/TimeZoneInput";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const TimeSettings: FC<Props> = (api) => {
+  const intl = useIntl();
   const [data, patch] = usePluginData(api, defaultData);
 
   return (
     <div className="TimeSettings">
       <label>
-        Name
+        <FormattedMessage {...messages.name} />
         <input
           type="text"
           value={data.name}
-          placeholder="Optional name"
+          placeholder={intl.formatMessage(messages.optionalName)}
           onChange={(event) => patch({ name: event.target.value })}
         />
       </label>
 
       <label>
-        Time Zone
+        <FormattedMessage {...messages.timeZone} />
         <TimeZoneInput
           timeZone={data.timeZone}
           onChange={(timeZone) => patch({ timeZone })}
@@ -33,7 +36,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.mode === "analogue"}
           onChange={() => patch({ mode: "analogue" })}
         />{" "}
-        Analogue
+        <FormattedMessage {...messages.timeAnalogue} />
       </label>
 
       <label>
@@ -42,7 +45,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.mode === "digital" && data.hour12}
           onChange={() => patch({ mode: "digital", hour12: true })}
         />{" "}
-        12-hour digital
+        <FormattedMessage {...messages.timeDigital12} />
       </label>
 
       <label>
@@ -51,7 +54,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.mode === "digital" && !data.hour12}
           onChange={() => patch({ mode: "digital", hour12: false })}
         />{" "}
-        24-hour digital
+        <FormattedMessage {...messages.timeDigital24} />
       </label>
 
       <label>
@@ -60,7 +63,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.showSeconds}
           onChange={() => patch({ showSeconds: !data.showSeconds })}
         />{" "}
-        Display seconds
+        <FormattedMessage {...messages.timeShowSeconds} />
       </label>
 
       <label>
@@ -69,7 +72,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.showMinutes}
           onChange={() => patch({ showMinutes: !data.showMinutes })}
         />{" "}
-        Display minutes
+        <FormattedMessage {...messages.timeShowMinutes} />
       </label>
 
       {data.mode === "digital" && data.hour12 && (
@@ -79,7 +82,7 @@ const TimeSettings: FC<Props> = (api) => {
             checked={data.showDayPeriod}
             onChange={() => patch({ showDayPeriod: !data.showDayPeriod })}
           />{" "}
-          Display day period
+          <FormattedMessage {...messages.timeShowDayPeriod} />
         </label>
       )}
 
@@ -89,7 +92,7 @@ const TimeSettings: FC<Props> = (api) => {
           checked={data.showDate}
           onChange={() => patch({ showDate: !data.showDate })}
         />{" "}
-        Display date
+        <FormattedMessage {...messages.timeShowDate} />
       </label>
     </div>
   );

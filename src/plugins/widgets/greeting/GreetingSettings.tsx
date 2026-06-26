@@ -1,6 +1,8 @@
 import React, { FC } from "react";
+import { FormattedMessage } from "react-intl";
 
 import { usePluginData } from "../../../hooks";
+import { messages } from "../messages";
 import { Props, defaultData } from "./types";
 
 const GreetingSettings: FC<Props> = (api) => {
@@ -9,7 +11,7 @@ const GreetingSettings: FC<Props> = (api) => {
   return (
     <div className="GreetingSettings">
       <label>
-        Name
+        <FormattedMessage {...messages.name} />
         <input
           type="text"
           value={data.name}

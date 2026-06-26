@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "濕度",
   "plugins.weather.low": "低溫",
   "settings": "設定",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

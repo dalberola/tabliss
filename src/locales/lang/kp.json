@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "상대습도",
   "plugins.weather.low": "최저",
   "settings": "설정",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

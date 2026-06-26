@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Vlhkost vzduchu",
   "plugins.weather.low": "Nízká",
   "settings": "Nastavení",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

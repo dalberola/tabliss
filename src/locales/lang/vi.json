@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Độ ẩm",
   "plugins.weather.low": "Thấp",
   "settings": "Cài đặt",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

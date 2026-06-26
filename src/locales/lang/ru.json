@@ -48,6 +48,7 @@
   "plugins.weather.humidity": "Влажность",
   "plugins.weather.low": "Минимум",
   "settings": "Настройки",
+  "settings.accountSync": "Account Sync",
   "settings.blur": "Blur",
   "settings.closeWidgetSettings": "Close widget settings",
   "settings.colour": "Colour",

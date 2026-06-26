@@ -1,95 +1,54 @@
 import { pick } from "in-browser-language";
-import ar from "./lang/ar.json";
-import caES from "./lang/ca-ES.json";
-import cs from "./lang/cs.json";
-import de from "./lang/de.json";
-import el from "./lang/el.json";
-import enAU from "./lang/en-AU.json";
-import enCA from "./lang/en-CA.json";
-import enGB from "./lang/en-GB.json";
-import es from "./lang/es.json";
-import fa from "./lang/fa.json";
-import fi from "./lang/fi.json";
-import fr from "./lang/fr.json";
-import ga from "./lang/ga.json";
-import gd from "./lang/gd.json";
-import gl from "./lang/gl.json";
-import gu from "./lang/gu.json";
-import hi from "./lang/hi.json";
-import hu from "./lang/hu.json";
-import id from "./lang/id.json";
-import it from "./lang/it.json";
-import ja from "./lang/ja.json";
-import ko from "./lang/ko.json";
-import kp from "./lang/kp.json";
-import lt from "./lang/lt.json";
-import lb from "./lang/lb.json";
-import ne from "./lang/ne.json";
-import nl from "./lang/nl.json";
-import no from "./lang/no.json";
-import ro from "./lang/ro.json";
-import ru from "./lang/ru.json";
-import sk from "./lang/sk.json";
-import sr from "./lang/sr.json";
-import sv from "./lang/sv.json";
-import pl from "./lang/pl.json";
-import pt from "./lang/pt.json";
-import ptBR from "./lang/pt-BR.json";
-import ta from "./lang/ta.json";
-import th from "./lang/th.json";
-import tr from "./lang/tr.json";
-import vi from "./lang/vi.json";
-import zhCN from "./lang/zh-CN.json";
-import zhTW from "./lang/zh-TW.json";
-import uk from "./lang/uk.json";
 
-export const messages: Record<string, Record<string, string>> = {
-  ar: ar,
-  "ca-ES": caES,
-  cs: cs,
-  de: de,
-  el: el,
-  en: {},
-  "en-AU": enAU,
-  "en-CA": enCA,
-  "en-GB": enGB,
-  es: es,
-  fa: fa,
-  fi: fi,
-  fr: fr,
-  ga: ga,
-  gd: gd,
-  gl: gl,
-  gu: gu,
-  hi: hi,
-  hu: hu,
-  id: id,
-  it: it,
-  ja: ja,
-  ko: ko,
-  kp: kp,
-  lt: lt,
-  lb: lb,
-  ne: ne,
-  nl: nl,
-  no: no,
-  ro: ro,
-  ru: ru,
-  sk: sk,
-  sr: sr,
-  sv: sv,
-  pl: pl,
-  pt: pt,
-  "pt-BR": ptBR,
-  ta: ta,
-  th: th,
-  tr: tr,
-  vi: vi,
-  zh: {},
-  "zh-CN": zhCN,
-  "zh-TW": zhTW,
-  uk: uk,
-};
+/**
+ * Single source of truth for the locales Tabliss ships.
+ *
+ * The catalogues themselves are NOT imported here — they are code-split and
+ * fetched on demand by `loadMessages` so a visitor downloads only their own
+ * language instead of all ~45 (see `IntlProvider`). `en` and `zh` carry no
+ * file and fall back to the source strings (each message's `defaultMessage`).
+ */
+export const locales = [
+  "ar", "ca-ES", "cs", "de", "el", "en", "en-AU", "en-CA", "en-GB", "es",
+  "fa", "fi", "fr", "ga", "gd", "gl", "gu", "hi", "hu", "id", "it", "ja",
+  "ko", "kp", "lt", "lb", "ne", "nl", "no", "ro", "ru", "sk", "sr", "sv",
+  "pl", "pt", "pt-BR", "ta", "th", "tr", "vi", "zh", "zh-CN", "zh-TW", "uk",
+];
 
-export const locales = Object.keys(messages);
 export const defaultLocale = pick(locales, "en");
+
+// Locales that intentionally have no catalogue file (they ARE the source).
+const SOURCE_LOCALES = new Set(["en", "zh"]);
+
+const cache = new Map<string, Record<string, string>>();
+
+/**
+ * Synchronously return an already-resolved catalogue, if one is available.
+ * Returns `{}` for source/unknown locales (no fetch needed), or `undefined`
+ * when a real catalogue still has to be loaded. Lets `IntlProvider` seed its
+ * first render without a flash when the catalogue is already known.
+ */
+export function peekMessages(locale: string): Record<string, string> | undefined {
+  if (SOURCE_LOCALES.has(locale) || !locales.includes(locale)) return {};
+  return cache.get(locale);
+}
+
+/** Lazily load (and memoise) the message catalogue for a locale. */
+export async function loadMessages(
+  locale: string,
+): Promise<Record<string, string>> {
+  const ready = peekMessages(locale);
+  if (ready) return ready;
+
+  const mod = (await import(
+    /* webpackChunkName: "locale-[request]" */
+    /* webpackExclude: /whitelist/ */
+    `./lang/${locale}.json`
+  )) as { default: Record<string, string> };
+
+  cache.set(locale, mod.default);
+  return mod.default;
+}
+
+// Warm the default locale so the first paint usually has its catalogue ready.
+void loadMessages(defaultLocale);

@@ -78,6 +78,14 @@ const initData: State = {
       position: { x: 50, y: 58 },
     },
   },
+  "widget/default-auth": {
+    id: "default-auth",
+    key: "widget/auth",
+    order: 2,
+    display: {
+      position: { x: 50, y: 90 },
+    },
+  },
   focus: false,
   locale: defaultLocale,
   timeZone: null,

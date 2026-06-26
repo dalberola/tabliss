@@ -1,9 +1,31 @@
 import React, { FC, useState } from "react";
 
 import { useAuth } from "../../../contexts/auth";
+import { usePluginData } from "../../../hooks";
 import "./AuthSettings.sass";
+import { AuthDisplay, Props, defaultData } from "./types";
 
-const AuthSettings: FC = () => {
+/** Lets the user choose how the sync status shows on the dashboard. */
+const DisplaySelect: FC<{
+  value: AuthDisplay;
+  onChange: (value: AuthDisplay) => void;
+}> = ({ value, onChange }) => (
+  <label className="auth-display">
+    Dashboard display
+    <select
+      value={value}
+      onChange={(event) => onChange(event.target.value as AuthDisplay)}
+    >
+      <option value="icon">Icon</option>
+      <option value="full">Full text</option>
+      <option value="hidden">Hidden</option>
+    </select>
+  </label>
+);
+
+const AuthSettings: FC<Props> = (api) => {
+  const [data, patch] = usePluginData(api, defaultData);
+  const display = data.display ?? defaultData.display;
   const { status, email, error, lastSyncedAt, login, register, logout, deleteAccount } =
     useAuth();
 
@@ -99,6 +121,8 @@ const AuthSettings: FC = () => {
             </div>
           </div>
         )}
+
+        <DisplaySelect value={display} onChange={(v) => patch({ display: v })} />
       </div>
     );
   }
@@ -211,6 +235,8 @@ const AuthSettings: FC = () => {
 
       {notice ? <p>{notice}</p> : null}
       {formError ?? error ? <p role="alert">{formError ?? error}</p> : null}
+
+      <DisplaySelect value={display} onChange={(v) => patch({ display: v })} />
     </div>
   );
 };

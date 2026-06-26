@@ -29,6 +29,13 @@ verified against build, tests, and lint before moving on.
   a hand-written `<option>` list in `src/views/settings/System.tsx`. Both are now
   generated from one `localeOptions` list (code + native label + English name),
   so adding a language is a single edit.
+- **Translation tooling modernised.** Replaced the unmaintained
+  `react-intl-translations-manager` + `typescript-react-intl` with
+  `@formatjs/cli` for extraction and a small deterministic sync script.
+  `npm run translations` now produces no diff on an unchanged tree (the old flow
+  churned files on every run), so it's safe to re-run and a CI guard can verify
+  catalogues are in sync. The obsolete `whitelist_*.json` bookkeeping files were
+  removed. No translation strings changed and the message set is identical.
 
 ### Fixed
 

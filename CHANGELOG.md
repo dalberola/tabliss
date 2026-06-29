@@ -58,6 +58,18 @@ verified against build, tests, and lint before moving on.
 
 ### Fixed
 
+- **Settings sync now propagates between devices.** Previously the client only
+  pulled the synced config on an explicit login and otherwise pushed blindly, so a
+  change made on one computer never reached an already-signed-in session on another
+  — and a stale device could silently overwrite a newer one (last *push* wins,
+  whole-document). Sync now reconciles by **edit time** (newest edit wins): the
+  client stamps each config with a clock, the server (`auth.diginaut.es`) rejects a
+  stale `PUT` with `409 PREFERENCES_CONFLICT`, and the client pulls on **boot** and
+  on **tab focus/visibility regain** (not just at login), importing only when the
+  server is strictly newer. An explicit login still adopts the account's config.
+  Requires the matching `auth-preferences-service` change (the `updatedAt`
+  optimistic-concurrency field). Note: reconciliation trusts each machine's clock,
+  so a badly skewed clock can mis-order concurrent edits.
 - **Hebrew (`he`) now works.** A complete `he.json` translation shipped but was
   never registered, so selecting Hebrew silently fell back to English. Folding
   the language list into one source registered it. The unused `zh` placeholder,

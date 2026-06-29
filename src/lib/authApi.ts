@@ -16,6 +16,11 @@ export interface ServerPreferences {
   locale?: string;
   schemaVersion?: number;
   settings?: Record<string, unknown>;
+  // Settings-blob clock (epoch-ms of the edit last written). Sent on PUT for
+  // optimistic concurrency — the server replies 409 if the stored value is newer —
+  // and returned on GET so the client can reconcile by edit time. 0/absent means
+  // "never written by a sync-aware client".
+  updatedAt?: number;
 }
 
 /** A structured error carrying the service's `{ error: { code, message } }`. */

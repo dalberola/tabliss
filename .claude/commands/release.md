@@ -11,8 +11,14 @@ Version: $ARGUMENTS
    `npm run build:web && npm test && npm run lint`. Stop if any fails.
 
 2. **Bump the version** in `package.json` (`"version"`). Use plain semver — no
-   `^`/`~`. This single field feeds the build (`VERSION` define) and the
-   extension manifests.
+   `^`/`~`. This field feeds the `VERSION` define in the build.
+
+   **It does not feed the extension manifests.** `target/chromium/manifest.json`
+   and `target/firefox/manifest.json` each hardcode their own `"version"` and are
+   copied verbatim by CopyWebpackPlugin, so they must be bumped by hand in the
+   same commit. Miss this and the extensions ship labelled with the previous
+   version. Verify after building:
+   `node -p "require('./dist/chromium/manifest.json').version"`.
 
 3. **Update `CHANGELOG.md`.** Follow the existing Keep-a-Changelog style:
    - New `## [<version>] - <YYYY-MM-DD>` section at the top, under the intro.

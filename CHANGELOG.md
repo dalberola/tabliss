@@ -5,8 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-A dependency-maintenance pass: bumps applied in risk-ordered waves, each
-verified against build, tests, and lint before moving on.
+## [2.9.0] - 2026-08-17
+
+A localization and sync release, on top of a full toolchain modernisation. The
+settings menu is now translatable end to end and right-to-left languages render
+correctly; settings reconcile between devices by edit time instead of
+last-push-wins; and language catalogues load on demand, cutting the web `main`
+bundle by roughly two thirds. Underneath, dependencies were taken to their
+latest workable versions in risk-ordered waves — each verified against build,
+tests, and lint before moving on — clearing every known vulnerability.
 
 ### Changed
 
@@ -22,6 +29,25 @@ verified against build, tests, and lint before moving on.
     original "no session tracking" intent.
   - `react-error-boundary` 4→6 — `onError` now receives `unknown`; the error is
     coerced to an `Error` before being captured.
+- **TypeScript 5.9 → 6.** Previously deferred, now adopted. Three changes made
+  it work: `tsconfig.test.json` needs an explicit `rootDir` (TS 6 raises TS5011
+  otherwise), the deprecated `moduleResolution: node10` is silenced with
+  `ignoreDeprecations: "6.0"` — migrating to `bundler` is still blocked by the
+  CommonJS test emit jest reads — and a new `src/@types/styles.d.ts` declares
+  `*.css`/`*.sass`, since TS 6 raises TS2882 on side-effect imports it cannot
+  resolve to a module.
+- **Node baseline raised to 24.** `webpack-dev-server` 5→6 requires Node
+  ≥ 22.15.0, so `engines`, `.nvmrc`, and every CI job move to Node 24
+  ("Krypton", the current active LTS). Node 20 had reached end of life — its
+  last release was 2026-03-24. **Contributors need Node 24 to build.**
+- **Toolchain kept current.** webpack 5.109, webpack-cli 7.2, sass 1.102,
+  ESLint 9.39.5, typescript-eslint 8.67, React 19.2.8, and the GitHub Actions
+  (`checkout`, `setup-node`, `upload-artifact`) to v7, clearing the runner's
+  Node 20 deprecation warning.
+- **`clean-webpack-plugin` replaced with webpack's native `output.clean`.** The
+  plugin had not been released since 2021 and was the root of most of the tree's
+  deprecation warnings, pulling in `del` → `rimraf@2` + `globby@6` → `glob@7` →
+  `inflight`. All four are gone; behaviour is unchanged.
 - **Lint cleaned to zero warnings.** Removed an unused import and a dead
   `eslint-disable` directive in `src/db/migrations/migrate2.ts`.
 - **Single source of truth for languages.** The language list lived in two
@@ -94,17 +120,31 @@ verified against build, tests, and lint before moving on.
 
 ### Security
 
-- **`uuid` advisory (GHSA-w5hq-g745-h8pq) patched** via an `overrides` entry that
-  forces `sockjs` (pulled in by `webpack-dev-server`) onto `uuid` ^11.1.1.
+- **`npm audit` is clean — 0 vulnerabilities.** Nine advisories were resolved,
+  including a `nanoid` infinite-loop pair (GHSA-28wg-ghj8-5hjv,
+  GHSA-2v37-7h3g-55p8) and two in `webpack-dev-server` (GHSA-f5vj-f2hx-8m93,
+  GHSA-m28w-2pqf-7qgj), plus transitive fixes across `body-parser`,
+  `brace-expansion`, `fast-uri`, `immutable`, `js-yaml`, `postcss`, and
+  `shell-quote`. The previously unfixable `js-yaml`/`@istanbuljs` chain now has
+  patched releases.
+- **The `uuid` override was removed, not weakened.** It existed to force
+  `sockjs` — pulled in by `webpack-dev-server` 5 — onto a patched `uuid`.
+  webpack-dev-server 6 no longer depends on `sockjs`, and neither package
+  appears anywhere in the tree, so the override was overriding nothing.
 
 ### Held
 
-- **TypeScript 6 and ESLint 10** were evaluated and deferred. TS 6 forces the
-  tsconfig off the deprecated `moduleResolution: node10` in a way that conflicts
-  with the CommonJS test-emit pipeline, and sits at the edge of
-  `typescript-eslint`'s supported range. ESLint 10 has no `eslint-plugin-react`
-  release supporting it (peer caps at `^9.7`). Both remain on their current
-  fully-supported majors. See `/upgrade-deps` for the full rationale.
+- **TypeScript 7 and ESLint 10** were evaluated and deferred (TypeScript 6 was
+  adopted — see Changed). `typescript-eslint` hard-refuses to load against TS 7,
+  and TS 7 *removes* `moduleResolution: node10` outright, so the test emit must
+  migrate to `node16`/ESM first. ESLint 10 runs the suite clean but still has no
+  `eslint-plugin-react` release supporting it (peer caps at `^9.7`), so adopting
+  it would ship an unmet peer dependency. **nanoid 6** is also held: it is
+  ESM-only and the test pipeline runs pre-compiled CommonJS with no transform
+  step, so it breaks `npm test`. `react-intl` is pinned to an exact `10.1.20` —
+  `10.1.21` was unpublished and `10.1.22` depends on a version of
+  `@formatjs/icu-messageformat-parser` that was never published, so any caret
+  range fails to install. See `/upgrade-deps` for the full rationale.
 
 ## [2.8.2] - 2026-05-24
 

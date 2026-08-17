@@ -77,6 +77,8 @@ message listing the bumps and what was verified. If on `main`, branch first.
   patched releases have since landed.
 - The old `overrides.uuid` pin is **gone**: it existed to patch `sockjs` via
   webpack-dev-server 5, and wds 6 no longer depends on sockjs.
+- `overrides` now pins `@emnapi/core` and `@emnapi/runtime` to `1.10.0`. Do not
+  remove it — see the lockfile section below.
 - Remaining deprecation warning is `inflight`, reached only through jest's
   coverage tooling (`jest → babel-plugin-istanbul → test-exclude@6 → glob@7`).
   Upstream; not actionable here.
@@ -88,6 +90,21 @@ out of sync on optional platform-specific deps, which breaks `npm ci` (every CI
 job uses it) while local `npm install` stays happy. Before finishing, always run
 `rm -rf node_modules && npm ci` and re-verify; if it errors, `npm install` to
 resync and commit the lockfile.
+
+**A green local `npm ci` does not prove CI will pass.** Dev machines here are
+darwin-arm64; CI is linux-x64, and npm can resolve the same lockfile differently
+on each. This bit once already: jest → `unrs-resolver` has an optional
+`wasm32-wasi` binding pinning `@emnapi/core`/`@emnapi/runtime` at an exact
+`1.10.0`, while its sibling `@napi-rs/wasm-runtime` declares those same two as
+*peer* deps with `^1.7.1 || ^2.0.0-alpha.4`. Local npm deduped onto 1.10.0; CI
+resolved the range to 1.11.3 and failed every job with "Missing:
+@emnapi/core@1.11.3 from lock file". Regenerating the lockfile did not fix it,
+and `--os=linux --cpu=x64` did **not** reproduce it. The fix was the `overrides`
+pin now in package.json.
+
+So: if a change touches the lockfile in any non-trivial way, **push a branch and
+let CI verify on Linux before merging to main** — `push.yml` runs `on: push`, so
+any branch gets the full matrix. Cheaper than a red main.
 
 When done, report: what was bumped, what required source changes, what was held
 and why, and the final build/test/lint/audit state.

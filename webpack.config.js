@@ -1,7 +1,6 @@
 require("dotenv/config");
 
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -22,6 +21,9 @@ const config = {
     path: path.resolve("dist", buildTarget),
     publicPath: "/",
     filename: isWeb ? "[name].[contenthash:12].js" : "[name].js",
+    // Native webpack 5 replacement for clean-webpack-plugin, which is
+    // unmaintained and pulled in a chain of deprecated packages.
+    clean: true,
   },
   mode: isProduction ? "production" : "development",
   resolve: {
@@ -61,7 +63,6 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: "target/shared" },

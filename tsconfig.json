@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    // TypeScript 6 deprecates moduleResolution "node" (node10). Migrating to
+    // "bundler" is blocked by the test build, which overrides module to
+    // "commonjs" so jest can run the emitted JS — a combination "bundler"
+    // rejects. Revisit alongside a node16/ESM test-emit migration; the option
+    // stops functioning in TypeScript 7.
+    "ignoreDeprecations": "6.0",
     "jsx": "react",
     "lib": ["esnext", "dom"],
     "module": "esnext",

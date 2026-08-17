@@ -3,7 +3,8 @@
   "compilerOptions": {
     "incremental": true,
     "module": "commonjs",
-    "outDir": "dist/test"
+    "outDir": "dist/test",
+    "rootDir": "src"
   },
   "exclude": []
 }
